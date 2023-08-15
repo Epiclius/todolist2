@@ -6,26 +6,25 @@ import "./App.css";
 
 function App() {
 
-  // const [scrollY, setScrollY] = useState(0);
+  const [scrollY, setScrollY] = useState(0);
 
-  // // Update scrollY state when scrolling
-  // const handleScroll = () => {
-  //   setScrollY(window.scrollY);
-  // };
+  // Update scrollY state when scrolling
+  const handleScroll = () => {
+    setScrollY(window.scrollY);
+  };
 
-  // // Attach scroll event listener
-  // React.useEffect(() => {
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, []);
+  // Attach scroll event listener
+  React.useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   // Create an animation based on scrollY
   const springProps = useSpring({
-    from: { transform: "translateX(0%)" },
-    to: { transform: "translateX(100%)" },
-    config: { duration: 1000, loop: true },
+    transform: `translateX(${scrollY}px)`, // Moves the element horizontally based on scroll
+    config: { mass: 1, tension: 200, friction: 25 },
   });
 
   return (
@@ -54,18 +53,18 @@ function App() {
         </div>
       </div>
 
-      <div style={{ overflow: "hidden" }}>
-        <div style={{ display: "flex" }}>
-          <animated.div
-            style={{
-              width: "10vw", // Make sure the element covers the viewport width
-              height: 80,
-              background: "#000000",
-              borderRadius: 8,
-              ...springProps,
-            }}
-          />
-        </div>
+      <div style={{ height: "200vh" }}>
+        {" "}
+        {/* Adds some height to the content */}
+        <animated.div
+          style={{
+            width: 80,
+            height: 80,
+            background: "#ff6d6d",
+            borderRadius: 8,
+            ...springProps,
+          }}
+        />
       </div>
     </>
   );
