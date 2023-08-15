@@ -1,0 +1,24 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    /* Set the container to full viewport height */
+}
+
+.TopNavBar {
+    height: 50px;
+    /* Set the fixed height */
+    background-color: lightgray;
+}
+
+.RestofTheBody {
+    flex: 1;
+    /* Let it take up the remaining vertical space */
+    background-color: lightblue;
+}
