@@ -4,11 +4,12 @@ interface Props {
   icon: ReactNode;
   text?: ReactNode;
   extraClass?: string;
+  onClick: () => void;
 }
 
-const Button = ({ icon, text, extraClass }: Props) => {
+const Button = ({ icon, text, extraClass, onClick }: Props) => {
   return (
-    <button type="button" className={"btn " + extraClass}>
+    <button type="button" className={"btn " + extraClass} onClick={onClick}>
       {icon} {text}
     </button>
   );

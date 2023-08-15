@@ -26,23 +26,30 @@
     background-color: aqua;
   }
 
-  .golden-container::before {
-
-  }
-
   .golden-container {
-    background-color: rgb(4, 255, 0);
+    display: grid;
     flex: 1;
+    padding: 30px 0;
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+    grid-template-columns: repeat(12, 1fr);
+
+    // a grid 3 rows 
+    // a grid template of 12 rows that depends on height of the container
+    grid-template-rows: repeat(12, 1fr);
+
+    background-color: rgb(4, 255, 0);
     // position: relative;
     // width: 100%;
 
-    .content {
-      // position: absolute;
-        // top: 0;
-        // left: 0;
-        // width: 100%;
-        // height: 100%;
-        background-color: lightgray;
+    .moving-day {
+      //grid spans all the way to the end of the container
+      grid-column: 1 / -1;
+    }
+
+    .task-panel {
+      grid-column: 1 / -1;
+      grid-row: 2 / -4;
     }
   }
 
@@ -84,6 +91,16 @@
       margin: 0 0.5rem;
       font-size: 1.5rem;
       cursor: pointer;
+    }
+  }
+}
+
+// hide the sidebar when the screen is small
+@media (max-width: 768px) {
+  .container {
+    .sidebarMenu {
+      background-color: #f00;
+      display: none;
     }
   }
 }
