@@ -1,20 +1,61 @@
-#root {
-  min-width: 100vw;
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-size: 16px;
+}
+
+.container {
+  position: relative;
+  min-height: 190%;
+}
+.container .content {
+  box-shadow: 50px 10px #ff0000;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(187, 255, 0, 0.9607843137);
 }
 
 .navbar {
   display: flex;
+  width: 100%;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background-color: #1a1a1a;
-  color: #fff;
+  padding: 0.5rem 1rem;
+  background-color: #ffaf3f;
+}
+.navbar .with-text {
+  display: flex;
+  align-items: center;
+}
+.navbar .with-text span {
+  margin: 0 0.25rem;
+}
+.navbar .profile_picture {
+  width: 2rem;
+  display: flex;
+  align-items: center;
+  border-radius: 50%;
+}
+.navbar div {
+  display: flex;
+  align-items: center;
+}
+.navbar div button {
+  background-color: transparent;
+  border: none;
+  color: #4f1818;
+  margin: 0 0.5rem;
+  font-size: 1.5rem;
+  cursor: pointer;
 }
 
 .logo {
@@ -23,11 +64,13 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+  filter: drop-shadow(0 0 2em rgba(100, 108, 255, 0.6666666667));
 }
+
 .logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  filter: drop-shadow(0 0 2em rgba(97, 218, 251, 0.6666666667));
 }
 
 @keyframes logo-spin {
@@ -38,13 +81,11 @@
     transform: rotate(360deg);
   }
 }
-
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
   }
 }
-
 .card {
   padding: 2em;
 }
@@ -52,3 +93,5 @@
 .read-the-docs {
   color: #888;
 }
+
+/*# sourceMappingURL=App.css.map */
