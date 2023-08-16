@@ -3,35 +3,60 @@ import { useSpring, animated } from "@react-spring/web";
 import NavMenu from "./components/NavMenu";
 import MyComponent from "./components/box";
 import "./App.css";
+import HorizontalScrollBox from "./components/ScrollingBox";
+import MovingBox from "./components/infinitebox";
+import { motion, useScroll } from "framer-motion";
+
 
 function App() {
+  const { scrollYProgress } = useScroll();
 
+  
   const [scrollY, setScrollY] = useState(0);
 
   // Update scrollY state when scrolling
-  const handleScroll = () => {
-    setScrollY(window.scrollY);
-  };
+  // const handleScroll = () => {
+  //   setScrollY(window.scrollY);
+  // };
 
   // Attach scroll event listener
-  React.useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  // React.useEffect(() => {
+  //   const scrollContainer = document.getElementById("scroll-container");
+  //   scrollContainer?.addEventListener("scroll", handleScroll);
+
+  //   return () => {
+  //     scrollContainer?.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, []);
+
 
   // Create an animation based on scrollY
-  const springProps = useSpring({
-    transform: `translateX(${scrollY}px)`, // Moves the element horizontally based on scroll
-    config: { mass: 1, tension: 200, friction: 25 },
-  });
+  // const springProps = useSpring({
+  //   transform: `translateX(${scrollY}px)`, // Moves the element horizontally based on scroll
+  //   config: { mass: 100, tension: 8000, friction: 125 },
+  // });
 
   return (
     <>
       {/* <MyComponent /> */}
       <div className="divide">
         <NavMenu />
+
+        <div>
+          {/* <p>Scroll Y: {scrollY}</p> */}
+          {/* <div
+            id="scroll-container"
+            style={{
+              height: "400px", // Adjust height as needed
+              overflowY: "scroll",
+              background: "lightgray",
+            }}
+          > */}
+            {/* <div style={{ height: "1000px", background: "transparent" }}>
+              Scroll down to see the effect
+            </div> */}
+          {/* </div> */}
+        </div>
 
         <div className="container">
           <div className="sidebarMenu">
@@ -47,24 +72,14 @@ function App() {
           </div>
 
           <div className="golden-container">
-            <div className="moving-day"></div>
+            <div className="moving-day">
+              <div>
+                <motion.div style={{ scaleX: scrollYProgress }} />
+              </div>
+            </div>
             <div className="task-panel"></div>
           </div>
         </div>
-      </div>
-
-      <div style={{ height: "200vh" }}>
-        {" "}
-        {/* Adds some height to the content */}
-        <animated.div
-          style={{
-            width: 80,
-            height: 80,
-            background: "#ff6d6d",
-            borderRadius: 8,
-            ...springProps,
-          }}
-        />
       </div>
     </>
   );
