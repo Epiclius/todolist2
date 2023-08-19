@@ -1,72 +1,69 @@
-import React, { useState } from "react";
-import { useSpring, animated } from "@react-spring/web";
-import NavMenu from "./components/NavMenu";
-import MyComponent from "./components/box";
+import React, { useEffect, useState } from "react";
 import "./App.css";
+import NavBar from "./components/Navbar";
+
 
 function App() {
+  const [browserWidth, setBrowserWidth] = useState(window.innerWidth);
 
-  // const [scrollY, setScrollY] = useState(0);
+  const handleResize = () => {
+    setBrowserWidth(window.innerWidth);
 
-  // // Update scrollY state when scrolling
-  // const handleScroll = () => {
-  //   setScrollY(window.scrollY);
-  // };
+    console.log("handleResize in window: " + window.innerWidth);
 
-  // // Attach scroll event listener
-  // React.useEffect(() => {
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, []);
+    console.log("handleResize: " + browserWidth);
+    if (browserWidth <= 768) {
+      console.log("toggleSidebar: " + browserWidth);
+      const sidebarMenu = document.getElementById("sidebarMenu");
 
-  // Create an animation based on scrollY
-  const springProps = useSpring({
-    from: { transform: "translateX(0%)" },
-    to: { transform: "translateX(100%)" },
-    config: { duration: 1000, loop: true },
-  });
+      if (!sidebarMenu) {
+        console.error("sidebarMenu is null");
+        return;
+      }
 
+      if (sidebarMenu.classList.contains("hidden")) {
+        sidebarMenu.classList.remove("hidden");
+      }
+      else {
+        sidebarMenu.classList.add("hidden");
+      }
+    }
+    else {
+      console.log("not toggleSidebar");
+    }
+  };
+
+  // make 4 arbitrary function
+  const toggleSidebar = () = {};
+    
+  const buttonActions = {
+    "toggleSidebar": toggleSidebar,
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+  
   return (
     <>
-      {/* <MyComponent /> */}
-      <div className="divide">
-        <NavMenu />
-
-        <div className="container">
-          <div className="sidebarMenu">
-            <a href="#" className="logo">
-              <span className="logo-text">Logo</span>
-            </a>
-            <a href="#" className="logo">
-              <span className="logo-text">Logo</span>
-            </a>
-            <a href="#" className="logo">
-              <span className="logo-text">Logo</span>
-            </a>
-          </div>
-
-          <div className="golden-container">
-            <div className="moving-day"></div>
-            <div className="task-panel"></div>
-          </div>
-        </div>
+      <NavBar functions={buttonActions} />
+      <div id="sidebarMenu">
+        <a href="#" className="logo">
+          <span className="logo-text">Logo</span>
+        </a>
+        <a href="#" className="logo">
+          <span className="logo-text">Logo</span>
+        </a>
+        <a href="#" className="logo">
+          <span className="logo-text">Logo</span>
+        </a>
       </div>
 
-      <div style={{ overflow: "hidden" }}>
-        <div style={{ display: "flex" }}>
-          <animated.div
-            style={{
-              width: "10vw", // Make sure the element covers the viewport width
-              height: 80,
-              background: "#000000",
-              borderRadius: 8,
-              ...springProps,
-            }}
-          />
-        </div>
-      </div>
+      <div className="container"></div>
     </>
   );
 }

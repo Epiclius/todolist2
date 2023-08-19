@@ -1,3 +1,4 @@
+import React from "react";
 import Button from "./Button";
 
 import {
@@ -7,11 +8,20 @@ import {
   AiFillStar,
 } from "react-icons/Ai";
 
-const NavMenu = () => {
+interface NavBarProps {
+  functions: {
+    [key: string]: () => void;
+  },
+}
+
+function NavBar({ functions }: NavBarProps) {
   return (
     <div className="navbar">
       <div>
-        <Button icon={<AiOutlineMenu />}></Button>
+        <Button
+          icon={<AiOutlineMenu />}
+          onClick={functions.toggleSidebar}
+        ></Button>
         <Button icon={<AiFillHome />}></Button>
         <input type="text" placeholder="Search" />
       </div>
@@ -35,6 +45,6 @@ const NavMenu = () => {
       </div>
     </div>
   );
-};
+}
 
-export default NavMenu;
+export default NavBar;
