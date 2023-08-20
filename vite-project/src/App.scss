@@ -12,10 +12,9 @@ $navBar-height: 50px;
 $sidebar-width: 200px;
 $primary-color: #303030;
 $secondary-color: #4f1818;
-$transition: all 0.3s ease-in-out;
+$transition: all .3s ease-in-out;
 
 #sidebarMenu {
-  // common styles
   background-color: $primary-color;
   color: #fff;
   padding: 1rem;
@@ -23,35 +22,34 @@ $transition: all 0.3s ease-in-out;
   flex-direction: column;
   align-items: center;  
   height: 100%;
-  position: fixed;
-  transform: translateX(0);
-
-}
-
-.hidden {
-  transform: translateX(-100%);
-}
-
-#sidebarMenu {
+  left: 0px;
+  z-index: 1000;
   transition: $transition;
   position: fixed;
   width: $sidebar-width;
   top: 50px;
-  height: calc(100vh - $navBar-height);
-  display: flex;
-  flex-direction: column;
-  background-color: aqua;
+
+  &.hidden {
+    background-color: $secondary-color;
+    left: -200px;
+  }
 }
 
-.container {
+#container {
+  padding: 2rem;
   transition: $transition;
-
   position: fixed;
   top:50px;
-    overflow: auto;
-  left:200px;
-  width: calc(100% - $sidebar-width);
+  overflow: auto;
+  left: 200px;
+  width: 100%;
   height: calc(100vh - $navBar-height);
+  width: calc(100% - $sidebar-width);
+  
+  &.expanded {
+    width: 100%;
+    left: 0px;
+  }
 }
 
 .navbar {
@@ -59,7 +57,9 @@ $transition: all 0.3s ease-in-out;
   display: flex;
   width: 100%;
   height: $navBar-height;
-  justify-content: space-between;
+  justify-content: center;
+  // gap
+  gap: 1rem;
   align-items: center;
   padding: .5rem 1rem;
   background-color: #ffaf3f;
@@ -94,15 +94,3 @@ $transition: all 0.3s ease-in-out;
     }
   }
 }
-
-// hide the sidebar when the screen is small
-// @media (max-width: 768px) {
-//   #sidebarMenu {
-//     transform: translateX(-100%);
-//   }
-
-//   .container {
-//     left: 0;
-//     width: 100%;
-//   }
-// }
