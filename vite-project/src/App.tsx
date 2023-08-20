@@ -3,101 +3,106 @@ import "./App.css";
 import NavBar from "./components/Navbar";
 
 function App() {
-  const [isSideBarMenuButtonClicked, setSidebarMenuButtonClicked] =
-    useState(false);
-  const [isClickedOnSmallWindow, setClickedOnSmallWindow] = useState(false);
-  const isWindowSmall = window.innerWidth <= 768;
+  // const [isSideBarMenuButtonClicked, setSidebarMenuButtonClicked] =
+  //   useState(false);
+  // const [isClickedOnSmallWindow, setClickedOnSmallWindow] = useState(false);
+  // const isWindowSmall = window.innerWidth <= 768;
 
-  const sidebarMenuClassName =
-    isSideBarMenuButtonClicked || (isWindowSmall && isClickedOnSmallWindow)
-      ? "hidden"
-      : "";
-  const containerClassName =
-    (isSideBarMenuButtonClicked && !isWindowSmall) ||
-    (!isClickedOnSmallWindow && isWindowSmall)
-      ? "expanded"
-      : "";
 
-  const handleResize = () => {
-    const sidebarMenu = document.getElementById("sidebarMenu");
-    const container = document.getElementById("container");
-    const newBrowserWidth = window.innerWidth;
 
-    if (!sidebarMenu || !container) {
-      console.log("sidebarMenu or container is null");
-      return;
-    }
+  // const sidebarMenuClassName =
+  //   isSideBarMenuButtonClicked || (isWindowSmall && isClickedOnSmallWindow)
+  //     ? "hidden"
+  //     : "";
+  // const containerClassName =
+  //   (isSideBarMenuButtonClicked && !isWindowSmall) ||
+  //   (!isClickedOnSmallWindow && isWindowSmall)
+  //     ? "expanded"
+  //     : "";
 
-    const isWindowSmall = newBrowserWidth < 768;
+  // const handleResize = () => {
+  //   const sidebarMenu = document.getElementById("sidebarMenu");
+  //   const container = document.getElementById("container");
+  //   const newBrowserWidth = window.innerWidth;
 
-    if (isSideBarMenuButtonClicked) {
-      console.log("isSideBarMenuButtonClicked is true");
+  //   if (!sidebarMenu || !container) {
+  //     console.log("sidebarMenu or container is null");
+  //     return;
+  //   }
 
-      if (
-        (isClickedOnSmallWindow && !isWindowSmall) ||
-        (!isClickedOnSmallWindow && isWindowSmall)
-      ) {
-        setSidebarMenuButtonClicked(false);
-        console.log(
-          "isClickedOnSmallWindow is " +
-            (isClickedOnSmallWindow ? "true" : "false")
-        );
-      }
-      return;
-    }
+  //   const isWindowSmall = newBrowserWidth < 768;
 
-    if (!isWindowSmall) {
-      sidebarMenu.classList.remove("hidden");
-      container.classList.remove("expanded");
-      setSidebarMenuButtonClicked(false);
-    } else {
-      if (
-        sidebarMenu.classList.contains("hidden") &&
-        container.classList.contains("expanded")
-      ) {
-        console.log("sidebarMenu is hidden and container is expanded");
-        return;
-      }
+  //   if (isSideBarMenuButtonClicked) {
+  //     console.log("isSideBarMenuButtonClicked is true");
 
-      console.log("sidebarMenu is not hidden and container is not expanded");
-      sidebarMenu.classList.add("hidden");
-      container.classList.add("expanded");
-      setSidebarMenuButtonClicked(false);
-    }
-  };
+  //     if (
+  //       (isClickedOnSmallWindow && !isWindowSmall) ||
+  //       (!isClickedOnSmallWindow && isWindowSmall)
+  //     ) {
+  //       setSidebarMenuButtonClicked(false);
+  //       console.log(
+  //         "isClickedOnSmallWindow is " +
+  //           (isClickedOnSmallWindow ? "true" : "false")
+  //       );
+  //     }
+  //     return;
+  //   }
+
+  //   if (!isWindowSmall) {
+  //     sidebarMenu.classList.remove("hidden");
+  //     container.classList.remove("expanded");
+  //     setSidebarMenuButtonClicked(false);
+  //   } else {
+  //     if (
+  //       sidebarMenu.classList.contains("hidden") &&
+  //       container.classList.contains("expanded")
+  //     ) {
+  //       console.log("sidebarMenu is hidden and container is expanded");
+  //       return;
+  //     }
+
+  //     console.log("sidebarMenu is not hidden and container is not expanded");
+  //     sidebarMenu.classList.add("hidden");
+  //     container.classList.add("expanded");
+  //     setSidebarMenuButtonClicked(false);
+  //   }
+  // };
+
+  // const toggleSidebar = () => {
+  //   const sidebarMenu = document.getElementById("sidebarMenu");
+  //   const container = document.getElementById("container");
+
+  //   if (!sidebarMenu) {
+  //     console.log("sidebarMenu is null");
+  //     return;
+  //   }
+
+  //   sidebarMenu.classList.toggle("hidden");
+
+  //   if (window.innerWidth >= 768) {
+  //     container?.classList.toggle("expanded");
+  //   }
+
+  //   setSidebarMenuButtonClicked(true);
+
+  //   const newBrowserWidth = window.innerWidth;
+  //   newBrowserWidth <= 768
+  //     ? setClickedOnSmallWindow(true)
+  //     : setClickedOnSmallWindow(false);
+  // };
 
   const toggleSidebar = () => {
-    const sidebarMenu = document.getElementById("sidebarMenu");
-    const container = document.getElementById("container");
-
-    if (!sidebarMenu) {
-      console.log("sidebarMenu is null");
-      return;
-    }
-
-    sidebarMenu.classList.toggle("hidden");
-
-    if (window.innerWidth >= 768) {
-      container?.classList.toggle("expanded");
-    }
-
-    setSidebarMenuButtonClicked(true);
-
-    const newBrowserWidth = window.innerWidth;
-    newBrowserWidth <= 768
-      ? setClickedOnSmallWindow(true)
-      : setClickedOnSmallWindow(false);
-  };
+  }
 
   const buttonActions = {
     toggleSidebar: toggleSidebar,
   };
 
-  useEffect(() => {
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [isClickedOnSmallWindow, isSideBarMenuButtonClicked]);
+  // useEffect(() => {
+  //   handleResize();
+  //   window.addEventListener("resize", handleResize);
+  //   return () => window.removeEventListener("resize", handleResize);
+  // }, [isClickedOnSmallWindow, isSideBarMenuButtonClicked]);
 
   return (
     <>
