@@ -1,114 +1,85 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
+
+import { debounce } from "lodash";
 import "./App.css";
 import NavBar from "./components/Navbar";
 
-function App() {
-  // const [isSideBarMenuButtonClicked, setSidebarMenuButtonClicked] =
-  //   useState(false);
-  // const [isClickedOnSmallWindow, setClickedOnSmallWindow] = useState(false);
-  // const isWindowSmall = window.innerWidth <= 768;
+export default function App() {
+  const [theme, setTheme] = useState("dark");
+  const initialContainersState: containerState = {
+    sidebarMenu: "",
+    mainContainer: "",
+    isAuto: true,
+    toBeReset: false,
+  };
 
-
-
-  // const sidebarMenuClassName =
-  //   isSideBarMenuButtonClicked || (isWindowSmall && isClickedOnSmallWindow)
-  //     ? "hidden"
-  //     : "";
-  // const containerClassName =
-  //   (isSideBarMenuButtonClicked && !isWindowSmall) ||
-  //   (!isClickedOnSmallWindow && isWindowSmall)
-  //     ? "expanded"
-  //     : "";
-
-  // const handleResize = () => {
-  //   const sidebarMenu = document.getElementById("sidebarMenu");
-  //   const container = document.getElementById("container");
-  //   const newBrowserWidth = window.innerWidth;
-
-  //   if (!sidebarMenu || !container) {
-  //     console.log("sidebarMenu or container is null");
-  //     return;
-  //   }
-
-  //   const isWindowSmall = newBrowserWidth < 768;
-
-  //   if (isSideBarMenuButtonClicked) {
-  //     console.log("isSideBarMenuButtonClicked is true");
-
-  //     if (
-  //       (isClickedOnSmallWindow && !isWindowSmall) ||
-  //       (!isClickedOnSmallWindow && isWindowSmall)
-  //     ) {
-  //       setSidebarMenuButtonClicked(false);
-  //       console.log(
-  //         "isClickedOnSmallWindow is " +
-  //           (isClickedOnSmallWindow ? "true" : "false")
-  //       );
-  //     }
-  //     return;
-  //   }
-
-  //   if (!isWindowSmall) {
-  //     sidebarMenu.classList.remove("hidden");
-  //     container.classList.remove("expanded");
-  //     setSidebarMenuButtonClicked(false);
-  //   } else {
-  //     if (
-  //       sidebarMenu.classList.contains("hidden") &&
-  //       container.classList.contains("expanded")
-  //     ) {
-  //       console.log("sidebarMenu is hidden and container is expanded");
-  //       return;
-  //     }
-
-  //     console.log("sidebarMenu is not hidden and container is not expanded");
-  //     sidebarMenu.classList.add("hidden");
-  //     container.classList.add("expanded");
-  //     setSidebarMenuButtonClicked(false);
-  //   }
-  // };
-
-  // const toggleSidebar = () => {
-  //   const sidebarMenu = document.getElementById("sidebarMenu");
-  //   const container = document.getElementById("container");
-
-  //   if (!sidebarMenu) {
-  //     console.log("sidebarMenu is null");
-  //     return;
-  //   }
-
-  //   sidebarMenu.classList.toggle("hidden");
-
-  //   if (window.innerWidth >= 768) {
-  //     container?.classList.toggle("expanded");
-  //   }
-
-  //   setSidebarMenuButtonClicked(true);
-
-  //   const newBrowserWidth = window.innerWidth;
-  //   newBrowserWidth <= 768
-  //     ? setClickedOnSmallWindow(true)
-  //     : setClickedOnSmallWindow(false);
-  // };
+  const [currentContainersState, toggleContainersState] = useReducer(
+    containerReducer,
+    initialContainersState
+  );
+  const [isWindowSmall, setWindowSmall] = useState(false);
 
   const toggleSidebar = () => {
-  }
+    if (isWindowSmall) {
+      toggleContainersState({ type: TOGGLE.SIDEBAR });
+    } else {
+      toggleContainersState({ type: TOGGLE.BOTH });
+    }
+
+    toggleContainersState({ type: TOGGLE.AUTO });
+
+    if (currentContainersState.toBeReset) {
+      toggleContainersState({ type: TOGGLE.TOBERESET, payload: false });
+      return;
+    }
+    toggleContainersState({ type: TOGGLE.TOBERESET, payload: true });
+  };
+
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === "day" ? "light" : "day"));
+  };
 
   const buttonActions = {
     toggleSidebar: toggleSidebar,
+    toggleTheme: toggleTheme,
   };
 
-  // useEffect(() => {
-  //   handleResize();
-  //   window.addEventListener("resize", handleResize);
-  //   return () => window.removeEventListener("resize", handleResize);
-  // }, [isClickedOnSmallWindow, isSideBarMenuButtonClicked]);
+  const handleResize = debounce(() => {
+    console.log("resize");
+    const newBrowserWidth = window.innerWidth;
+    if (newBrowserWidth <= 768) {
+      setWindowSmall(true);
+    } else {
+      setWindowSmall(false);
+    }
+  }, 150);
+  
+  useEffect(() => {
+    handleResize();
+    
+    // automatic toggle sidebar on window resize
+    if (currentContainersState.isAuto) {
+      toggleContainersState({ type: TOGGLE.BOTH });
+    }
+
+    // after manual toggle sidebar, reset auto toggle
+    if (currentContainersState.toBeReset) {
+      if (!isWindowSmall) {
+        toggleContainersState({ type: TOGGLE.MAINCONTAINER });
+      }
+      toggleContainersState({ type: TOGGLE.AUTO });
+      toggleContainersState({ type: TOGGLE.TOBERESET, payload: false });
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isWindowSmall]);
 
   return (
     <>
       <NavBar functions={buttonActions} />
 
-      <div id="sidebarMenu">
+      <div id="sidebarMenu" className={`${theme} ${currentContainersState.sidebarMenu}`}>
         {/* <p>sidebar state: {isWindowSmall.toString()}</p> */}
 
         <a href="#" className="logo">
@@ -122,7 +93,7 @@ function App() {
         </a>
       </div>
 
-      <div id="container">
+      <div id="container" className={currentContainersState.mainContainer}>
         <p>
           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil, a
           quod aliquid voluptates, quia fuga laborum eligendi animi soluta quis
@@ -141,4 +112,60 @@ function App() {
   );
 }
 
-export default App;
+const TOGGLE = {
+  SIDEBAR: "toggleSidebar",
+  MAINCONTAINER: "toggleMainContainer",
+  BOTH: "toggleBoth",
+  AUTO: "toggleAuto",
+  TOBERESET: "toggleReset",
+};
+
+interface containerState {
+  sidebarMenu: "hidden" | "";
+  mainContainer: "expanded" | "";
+  isAuto: boolean;
+  toBeReset: boolean | undefined;
+}
+
+interface ToggleSidebarAction {
+  type: string;
+  payload?: boolean;
+}
+
+function containerReducer(
+  state: containerState,
+  toggleContainersState: ToggleSidebarAction
+): containerState {
+  const {type, payload} = toggleContainersState
+
+  switch (type) {
+    case TOGGLE.TOBERESET:
+      return {
+        ...state,
+        toBeReset: payload,
+      };
+    case TOGGLE.AUTO:
+      return {
+        ...state,
+        isAuto: !state.isAuto,
+      };
+    case TOGGLE.SIDEBAR:
+      return {
+        ...state,
+        sidebarMenu: state.sidebarMenu === "hidden" ? "" : "hidden",
+      };
+    case TOGGLE.MAINCONTAINER:
+      return {
+        ...state,
+        mainContainer: state.mainContainer === "expanded" ? "" : "expanded",
+      };
+    case TOGGLE.BOTH:
+      return {
+        ...state,
+        sidebarMenu: state.sidebarMenu === "hidden" ? "" : "hidden",
+        mainContainer: state.mainContainer === "expanded" ? "" : "expanded",
+      };
+    default:
+      return state;
+  }
+}

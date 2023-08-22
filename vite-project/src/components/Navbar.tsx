@@ -1,10 +1,9 @@
 import React from "react";
 import Button from "./Button";
 
-import {
-  AiFillHome,
-  AiOutlineMenu,
-} from "react-icons/Ai";
+
+// https://react-icons.github.io/react-icons/
+import { AiFillHome, AiOutlineMenu, AiFillDislike } from "react-icons/Ai";
 
 interface NavBarProps {
   functions: {
@@ -15,12 +14,13 @@ interface NavBarProps {
 function NavBar({ functions }: NavBarProps) {
   return (
     <div className="navbar">
-        <Button
-          icon={<AiOutlineMenu />}
-          onClick={functions.toggleSidebar}
-        ></Button>
-        <Button icon={<AiFillHome />}></Button>
-        <input type="text" placeholder="Search" />
+      <Button
+        icon={<AiOutlineMenu />}
+        onClick={functions.toggleSidebar}
+      ></Button>
+      <Button icon={<AiFillHome />}></Button>
+      <input type="text" placeholder="Search" />
+      <Button icon={<AiFillDislike />} onClick={functions.toggleTheme}></Button>
     </div>
   );
 }
