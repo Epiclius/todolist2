@@ -1,9 +1,11 @@
-import React from "react";
+
 import Button from "./Button";
 
 
 // https://react-icons.github.io/react-icons/
 import { AiFillHome, AiOutlineMenu, AiFillDislike } from "react-icons/Ai";
+import { ThemeContext } from "./ThemeContext";
+import { useContext } from "react";
 
 interface NavBarProps {
   functions: {
@@ -12,8 +14,11 @@ interface NavBarProps {
 }
 
 function NavBar({ functions }: NavBarProps) {
+  const { theme } = useContext(ThemeContext);
+
+
   return (
-    <div className="navbar">
+    <div className={`${theme} navbar`}>
       <Button
         icon={<AiOutlineMenu />}
         onClick={functions.toggleSidebar}

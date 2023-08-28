@@ -6,17 +6,22 @@
   box-shadow: inset 0px 0px 0px 2px #f00;
 }
 
+a {
+  text-decoration: none;
+}
 
 // scss variables
 $navBar-height: 50px;
 $sidebar-width: 200px;
-$primary-color: #303030;
-$secondary-color: #4f1818;
+$text-color: #fff;
+$dark-text-color: #ffffff;
+$primary-color: #e4a778;
+$dark-primary-color: #182a52;
+$secondary-color: #fc0303;
 $transition: all .3s ease-in-out;
 
 #sidebarMenu {
-  background-color: $primary-color;
-  color: #fff;
+  background-color: $primary-color;  
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -24,10 +29,25 @@ $transition: all .3s ease-in-out;
   height: 100%;
   left: 0px;
   z-index: 1000;
-  transition: $transition;
   position: fixed;
   width: $sidebar-width;
   top: 50px;
+  transition: $transition;
+  
+  &.dark {
+    background-color: $dark-primary-color;
+    color: $dark-text-color;
+    transition: $transition;
+
+    a span{
+      transition: $transition;
+      color: $dark-text-color;
+    }
+  }
+
+  a span {
+    transition: $transition;
+  }
 
   &.hidden {
     background-color: $secondary-color;
@@ -46,6 +66,11 @@ $transition: all .3s ease-in-out;
   height: calc(100vh - $navBar-height);
   width: calc(100% - $sidebar-width);
   
+  &.dark {
+    background-color: $dark-primary-color;    
+    color: $dark-text-color;
+  }
+
   &.expanded {
     width: 100%;
     left: 0px;
@@ -54,16 +79,22 @@ $transition: all .3s ease-in-out;
 
 .navbar {
   position: fixed;
+  transition: $transition;
   display: flex;
   width: 100%;
   height: $navBar-height;
   justify-content: center;
-  // gap
   gap: 1rem;
   align-items: center;
   padding: .5rem 1rem;
   background-color: #ffaf3f;
   
+  &.dark {
+    background-color: $dark-primary-color;
+    color: $dark-text-color;
+    font-size: 1.5rem;
+  }
+
   .with-text {
     display: flex;
     align-items: center;

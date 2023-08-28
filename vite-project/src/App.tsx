@@ -1,11 +1,12 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState, useContext } from "react";
 
 import { debounce } from "lodash";
+import { ThemeContext } from "./components/ThemeContext";
 import "./App.css";
 import NavBar from "./components/Navbar";
 
 export default function App() {
-  const [theme, setTheme] = useState("dark");
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const initialContainersState: containerState = {
     sidebarMenu: "",
     mainContainer: "",
@@ -34,11 +35,7 @@ export default function App() {
     }
     toggleContainersState({ type: TOGGLE.TOBERESET, payload: true });
   };
-
-  const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === "day" ? "light" : "day"));
-  };
-
+  
   const buttonActions = {
     toggleSidebar: toggleSidebar,
     toggleTheme: toggleTheme,
@@ -53,10 +50,10 @@ export default function App() {
       setWindowSmall(false);
     }
   }, 150);
-  
+
   useEffect(() => {
     handleResize();
-    
+
     // automatic toggle sidebar on window resize
     if (currentContainersState.isAuto) {
       toggleContainersState({ type: TOGGLE.BOTH });
@@ -79,22 +76,30 @@ export default function App() {
     <>
       <NavBar functions={buttonActions} />
 
-      <div id="sidebarMenu" className={`${theme} ${currentContainersState.sidebarMenu}`}>
-        {/* <p>sidebar state: {isWindowSmall.toString()}</p> */}
+      <div
+        id="sidebarMenu"
+        className={`${theme} ${currentContainersState.sidebarMenu}`}
+      >
+        <a href="#"><span>Logo</span>
+        </a>
+        <a href="#"><span>Logo</span>
+        </a>
+        <a href="#"><span>Logo</span>
+        </a>
 
-        <a href="#" className="logo">
-          <span className="logo-text">Logo</span>
-        </a>
-        <a href="#" className="logo">
-          <span className="logo-text">Logo</span>
-        </a>
-        <a href="#" className="logo">
-          <span className="logo-text">Logo</span>
-        </a>
+        <span> some text </span>
       </div>
 
-      <div id="container" className={currentContainersState.mainContainer}>
+      <div
+        id="container"
+        className={`${theme} ${currentContainersState.mainContainer}`}
+      >
+
         <p>
+          <div>
+            TESTINGrt
+            <div> TESTING PART 2</div>
+          </div>
           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil, a
           quod aliquid voluptates, quia fuga laborum eligendi animi soluta quis
           maxime. Quisquam, officiis similique non deserunt reprehenderit nihil
@@ -136,7 +141,7 @@ function containerReducer(
   state: containerState,
   toggleContainersState: ToggleSidebarAction
 ): containerState {
-  const {type, payload} = toggleContainersState
+  const { type, payload } = toggleContainersState;
 
   switch (type) {
     case TOGGLE.TOBERESET:
