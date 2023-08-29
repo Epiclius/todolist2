@@ -4,6 +4,10 @@ import { debounce } from "lodash";
 import { ThemeContext } from "./components/ThemeContext";
 import "./App.css";
 import NavBar from "./components/Navbar";
+import { Link, Route, Routes, BrowserRouter } from "react-router-dom";
+import TodayPage from "./components/TodayPage";
+import UpcomingPage from "./components/UpcomingPage";
+
 
 export default function App() {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -76,43 +80,31 @@ export default function App() {
     <>
       <NavBar functions={buttonActions} />
 
-      <div
-        id="sidebarMenu"
-        className={`${theme} ${currentContainersState.sidebarMenu}`}
-      >
-        <a href="#"><span>Logo</span>
-        </a>
-        <a href="#"><span>Logo</span>
-        </a>
-        <a href="#"><span>Logo</span>
-        </a>
+      <BrowserRouter>
+        <div
+          id="sidebarMenu"
+          className={`${theme} ${currentContainersState.sidebarMenu}`}
+        >
+          <Link to="/">
+            <span>Today</span>
+          </Link>
+          <Link to="/Upcoming">
+            <span>Upcoming</span>
+          </Link>
 
-        <span> some text </span>
-      </div>
+          <span className="projects"> some text </span>
+        </div>
 
-      <div
-        id="container"
-        className={`${theme} ${currentContainersState.mainContainer}`}
-      >
-
-        <p>
-          <div>
-            TESTINGrt
-            <div> TESTING PART 2</div>
-          </div>
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil, a
-          quod aliquid voluptates, quia fuga laborum eligendi animi soluta quis
-          maxime. Quisquam, officiis similique non deserunt reprehenderit nihil
-          harum delectus temporibus quas veniam. Repellat officiis unde facilis
-          veniam, quaerat molestias pariatur, ducimus ad, quas ea nihil ipsam
-          quos ratione? Nam vitae expedita debitis at suscipit dolorem quasi
-          officia numquam voluptates doloribus delectus similique minima facilis
-          sint porro vero cumque iure adipisci facere nisi, ea accusamus. Cumque
-          beatae porro iste quidem tempora hic quisquam fugiat nisi non impedit
-          odit ipsum, ipsam ab itaque. Veniam recusandae fugit repudiandae
-          dignissimos nam, dolorum consequuntur.
-        </p>
-      </div>
+        <div
+          id="container"
+          className={`${theme} ${currentContainersState.mainContainer}`}
+        >
+          <Routes>
+            <Route path="/" element={<TodayPage />} />
+            <Route path="/upcoming" element={<UpcomingPage />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
     </>
   );
 }

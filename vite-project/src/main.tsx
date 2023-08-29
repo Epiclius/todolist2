@@ -3,11 +3,14 @@ import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 import { ThemeProvider } from './components/ThemeContext.tsx'
+import { IconContext } from "react-icons";
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ThemeProvider>
-      <App />
-    </ThemeProvider>
+    <IconContext.Provider value={{ className: "react-icons" }} >
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
+    </IconContext.Provider>
   </React.StrictMode>
-)
+);

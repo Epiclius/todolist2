@@ -3,7 +3,7 @@
   margin: 0;
   padding: 0;
   font-size: 16px;
-  box-shadow: inset 0px 0px 0px 2px #f00;
+  box-shadow: inset 0px 0px 0px 1px rgba(255, 0, 0, 0.195);
 }
 
 a {
@@ -11,29 +11,65 @@ a {
 }
 
 // scss variables
+
+@mixin horiz-divider($color: $dark-primary-color) {
+  border-bottom: 1px solid $color;
+  margin: 10px 0;
+}
+
 $navBar-height: 50px;
-$sidebar-width: 200px;
+$sidebar-width: 300px;
 $text-color: #fff;
 $dark-text-color: #ffffff;
 $primary-color: #e4a778;
 $dark-primary-color: #182a52;
 $secondary-color: #fc0303;
-$transition: all .3s ease-in-out;
+$transition: all .2s ease-in-out;
+
+.btn {
+  // make it a square
+  width: 1.5rem;
+  height: 1.2rem;
+  cursor: pointer;
+  // make items inside this centered
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+
+  background-color: transparent;
+  border-radius: 10%;
+  border: none;
+
+  &:hover {
+    // background-color: #00c8ffb4;
+  }
+}
+
+.react-icons {
+  vertical-align: middle;
+  transition: $transition;
+  &:hover {
+    // background-color: #00c8ff;
+    color: #ffffff;
+    font-size: 1.2rem;
+  }
+}
 
 #sidebarMenu {
   background-color: $primary-color;  
-  padding: 1rem;
+  padding: 1rem 2rem;
   display: flex;
   flex-direction: column;
-  align-items: center;  
-  height: 100%;
+  height: calc(100vh - $navBar-height);
   left: 0px;
   z-index: 1000;
   position: fixed;
   width: $sidebar-width;
   top: 50px;
   transition: $transition;
-  
+
   &.dark {
     background-color: $dark-primary-color;
     color: $dark-text-color;
@@ -45,27 +81,86 @@ $transition: all .3s ease-in-out;
     }
   }
 
-  a span {
-    transition: $transition;
+
+  a {
+    padding: 1rem 1rem;
+
+    span {
+      transition: $transition;
+    }
+  }
+
+  .projects {
+    padding: 1rem 1rem;
   }
 
   &.hidden {
     background-color: $secondary-color;
-    left: -200px;
+    left: -$sidebar-width;
   }
 }
 
 #container {
-  padding: 2rem;
+  padding: 2rem 10%;
   transition: $transition;
   position: fixed;
   top:50px;
   overflow: auto;
-  left: 200px;
-  width: 100%;
+  left: $sidebar-width;
   height: calc(100vh - $navBar-height);
   width: calc(100% - $sidebar-width);
   
+  .task-container{
+    transition: $transition;
+    padding: .5rem 1rem;
+    border-radius: 10px;
+    margin: .5rem 0 1rem 0;
+    cursor: pointer;
+
+    .task-container-buttons {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .edit-box {
+      display: flex;
+      align-items: center;
+    }
+
+    .name-check-box {
+      display: flex;
+      align-items: center;
+    }
+
+    .check-box {
+      margin: 0 .5rem 0 0;
+    }
+
+    &:hover {
+      background-color: #00c8ff2d;
+    }
+    
+    .name {
+      color: #66ff00;
+      font-size: calc(1rem + 20%);
+    }
+
+    .description {
+      color: #00c8ff;
+      @include horiz-divider;
+
+      &.dark {
+        @include horiz-divider($dark-text-color);
+      }
+    }
+  }
+
+  .title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
   &.dark {
     background-color: $dark-primary-color;    
     color: $dark-text-color;
