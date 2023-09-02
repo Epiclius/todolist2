@@ -1,8 +1,8 @@
 import { ReactNode } from "react";
 
 interface Props {
-  icon: ReactNode;
-  text?: ReactNode;
+  icon?: ReactNode;
+  text?: string;
   extraClass?: string;
   onClick?: () => void;
 }

@@ -3,7 +3,6 @@
   margin: 0;
   padding: 0;
   font-size: 16px;
-  box-shadow: inset 0px 0px 0px 1px rgba(255, 0, 0, 0.195);
 }
 
 a {
@@ -11,29 +10,47 @@ a {
 }
 
 .btn {
-  width: 1.5rem;
-  height: 1.2rem;
+  padding: 0.4rem;
   cursor: pointer;
   display: flex;
-  flex-direction: column;
   text-align: center;
   justify-content: center;
   align-items: center;
   background-color: transparent;
-  border-radius: 10%;
   border: none;
+  border-radius: 5px;
 }
+.btn.cancel-button {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  display: inline-block;
+  margin-left: 0.4rem;
+  background-color: rgba(77, 59, 64, 0.7);
+  color: rgba(240, 248, 255, 0.7);
+}
+.btn.save-button {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  display: inline-block;
+  margin-left: 0.4rem;
+  background-color: #b34d4d;
+  color: aliceblue;
+}
+.btn:hover {
+  background-color: #363239;
+}
+.btn:hover .react-icons {
+  color: #ffb4a2;
+}
+
 .react-icons {
+  color: #69464d;
   vertical-align: middle;
   transition: all 0.2s ease-in-out;
 }
-.react-icons:hover {
-  color: #ffffff;
-  font-size: 1.2rem;
-}
 
 #sidebarMenu {
-  background-color: #e4a778;
+  background-color: #ffb4a2;
   padding: 1rem 2rem;
   display: flex;
   flex-direction: column;
@@ -44,17 +61,19 @@ a {
   width: 300px;
   top: 50px;
   transition: all 0.2s ease-in-out;
+  color: #363239;
 }
 #sidebarMenu.dark {
-  background-color: #182a52;
-  color: #ffffff;
+  background-color: #363239;
+  color: #ffcdb2;
   transition: all 0.2s ease-in-out;
 }
 #sidebarMenu.dark a span {
   transition: all 0.2s ease-in-out;
-  color: #ffffff;
+  color: #ffcdb2;
 }
 #sidebarMenu a {
+  color: #363239;
   padding: 1rem 1rem;
 }
 #sidebarMenu a span {
@@ -64,11 +83,33 @@ a {
   padding: 1rem 1rem;
 }
 #sidebarMenu.hidden {
-  background-color: #fc0303;
   left: -300px;
 }
 
+.todayPage {
+  width: 100%;
+  height: 100%;
+}
+.todayPage .task-list {
+  width: 100%;
+  height: 100%;
+}
+.todayPage .add-task-btn {
+  width: 100%;
+  height: 1.5rem;
+  display: flex;
+  align-items: left;
+  justify-content: left;
+  padding: 0 0 0 0.5rem;
+  color: #69464d;
+  transition: all 0.2s ease-in-out;
+}
+.todayPage .add-task-btn:hover {
+  background-color: #69464d;
+  color: #ffb4a2;
+}
 #container {
+  background-color: #ffcdb2;
   padding: 2rem 10%;
   transition: all 0.2s ease-in-out;
   position: fixed;
@@ -76,54 +117,145 @@ a {
   overflow: auto;
   left: 300px;
   height: calc(100vh - 50px);
-  width: calc(100% - 300px);
+  width: calc(100vw - 300px);
 }
-#container .task-container {
+#container .task-edit-container {
+  box-shadow: 0px 0px 0px 2px rgba(105, 70, 77, 0.3);
+  border-bottom: 1px solid #e5989b;
+  margin: 10px 0;
+}
+#container .task-edit-container.dark .edit-title .textarea {
+  background-color: rgba(54, 50, 57, 0.3);
+}
+#container .task-edit-container.dark .description-text-area .textarea {
+  background-color: rgba(54, 50, 57, 0.3);
+}
+#container .task-edit-container .edit-box {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  padding-top: 0.5rem;
+}
+#container .task-edit-container .edit-title {
+  width: 100%;
+}
+#container .task-edit-container .edit-title .textarea {
+  margin-top: 1rem;
+  border-radius: 10px;
+  padding: 1rem;
+  resize: none;
+  width: 100%;
+  height: 100px;
+  background-color: rgba(255, 205, 178, 0.5);
+  border: none;
+  height: 50px;
+  margin: 0;
+  background-color: rgba(255, 205, 178, 0.3);
+}
+#container .task-edit-container .edit-title .textarea:focus {
+  outline: none;
+}
+#container .task-edit-container .description-text-area .textarea {
+  margin-top: 1rem;
+  border-radius: 10px;
+  padding: 1rem;
+  resize: none;
+  width: 100%;
+  height: 100px;
+  background-color: rgba(255, 205, 178, 0.5);
+  border: none;
+}
+#container .task-edit-container .description-text-area .textarea:focus {
+  outline: none;
+}
+#container .task-edit-container .input-container {
+  display: flex;
+  flex-direction: column;
+}
+#container .task-edit-container .input-container .description-input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background-color: aqua;
+  color: #69464d;
+  font-size: 1rem;
+  padding: 0 0 0 1rem;
+  resize: none;
+  flex: 1;
+  transition: all 0.2s ease-in-out;
+  min-width: 100px;
+}
+#container .task-container:hover .edit-box {
+  display: flex;
+  pointer-events: all;
+}
+#container .task-container .edit-box {
+  display: none;
+  align-items: center;
+  pointer-events: none;
+}
+#container .task-edit-container, #container .task-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   transition: all 0.2s ease-in-out;
   padding: 0.5rem 1rem;
   border-radius: 10px;
-  margin: 0.5rem 0 1rem 0;
+  margin-bottom: 0.5rem;
   cursor: pointer;
 }
-#container .task-container .task-container-buttons {
+#container .task-edit-container:hover, #container .task-container:hover {
+  background-color: #ffb4a2;
+}
+#container .task-edit-container:hover.dark, #container .task-container:hover.dark {
+  background-color: #69464d;
+}
+#container .task-edit-container .task-container-buttons, #container .task-container .task-container-buttons {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-#container .task-container .edit-box {
+#container .task-edit-container .name-check-box, #container .task-container .name-check-box {
   display: flex;
   align-items: center;
 }
-#container .task-container .name-check-box {
-  display: flex;
-  align-items: center;
-}
-#container .task-container .check-box {
+#container .task-edit-container .check-box, #container .task-container .check-box {
   margin: 0 0.5rem 0 0;
 }
-#container .task-container:hover {
-  background-color: rgba(0, 200, 255, 0.1764705882);
-}
-#container .task-container .name {
-  color: #66ff00;
+#container .task-edit-container .name, #container .task-container .name {
+  color: #69464d;
   font-size: calc(1rem + 20%);
 }
-#container .task-container .description {
-  color: #00c8ff;
-  border-bottom: 1px solid #182a52;
+#container .task-edit-container .description, #container .task-container .description {
+  color: #69464d;
+  border-bottom: 1px solid #e5989b;
   margin: 10px 0;
 }
-#container .task-container .description.dark {
-  border-bottom: 1px solid #ffffff;
+#container .task-edit-container .description.dark, #container .task-container .description.dark {
+  color: #e5989b;
+  border-bottom: 1px solid #69464d;
   margin: 10px 0;
 }
 #container .title {
+  color: #69464d;
   font-size: 2rem;
   margin-bottom: 1rem;
 }
 #container.dark {
-  background-color: #182a52;
-  color: #ffffff;
+  background-color: #363239;
+}
+#container.dark .title {
+  color: #ffcdb2;
+}
+#container.dark .name {
+  color: #e5989b;
+}
+#container.dark .react-icons {
+  color: #e5989b;
+}
+#container.dark .task-container:hover {
+  background-color: #69464d;
 }
 #container.expanded {
   width: 100%;
@@ -140,12 +272,32 @@ a {
   gap: 1rem;
   align-items: center;
   padding: 0.5rem 1rem;
-  background-color: #ffaf3f;
+  background-color: #69464d;
+}
+.navbar input {
+  height: 90%;
+  border-radius: 5px;
+  background-color: #ffcdb2;
+  border: none;
+}
+.navbar input::placeholder {
+  color: #69464d;
+  padding: 0 0 0 5px;
+}
+.navbar .react-icons {
+  color: #ffcdb2;
 }
 .navbar.dark {
-  background-color: #182a52;
-  color: #ffffff;
-  font-size: 1.5rem;
+  background-color: #e5989b;
+}
+.navbar.dark input {
+  background-color: #363239;
+}
+.navbar.dark input::placeholder {
+  color: #69464d;
+}
+.navbar.dark .react-icons {
+  color: #363239;
 }
 .navbar .with-text {
   display: flex;
@@ -167,7 +319,6 @@ a {
 .navbar div button {
   background-color: transparent;
   border: none;
-  color: #4f1818;
   margin: 0 0.5rem;
   font-size: 1.5rem;
   cursor: pointer;

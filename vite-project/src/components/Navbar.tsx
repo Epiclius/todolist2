@@ -1,16 +1,14 @@
-
 import Button from "./Button";
-
 
 // https://react-icons.github.io/react-icons/
 import { AiOutlineMenu, AiFillDislike } from "react-icons/Ai";
-import { ThemeContext } from "./ThemeContext";
+import { ThemeContext } from "./ThemeProvider";
 import { useContext } from "react";
 
 interface NavBarProps {
   functions: {
     [key: string]: () => void;
-  },
+  };
 }
 
 function NavBar({ functions }: NavBarProps) {

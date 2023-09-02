@@ -1,22 +1,15 @@
 import React, { useEffect, useReducer, useState, useContext } from "react";
 
 import { debounce } from "lodash";
-import { ThemeContext } from "./components/ThemeContext";
+import { ThemeContext } from "./components/ThemeProvider";
 import "./App.css";
 import NavBar from "./components/Navbar";
 import { Link, Route, Routes, BrowserRouter } from "react-router-dom";
 import TodayPage from "./components/TodayPage";
 import UpcomingPage from "./components/UpcomingPage";
 
-
 export default function App() {
   const { theme, toggleTheme } = useContext(ThemeContext);
-  const initialContainersState: containerState = {
-    sidebarMenu: "",
-    mainContainer: "",
-    isAuto: true,
-    toBeReset: false,
-  };
 
   const [currentContainersState, toggleContainersState] = useReducer(
     containerReducer,
@@ -26,53 +19,64 @@ export default function App() {
 
   const toggleSidebar = () => {
     if (isWindowSmall) {
-      toggleContainersState({ type: TOGGLE.SIDEBAR });
+      toggleContainersState({ type: "TOGGLE_SIDEBAR" });
     } else {
-      toggleContainersState({ type: TOGGLE.BOTH });
+      toggleContainersState({ type: "TOGGLE_BOTH" });
     }
 
-    toggleContainersState({ type: TOGGLE.AUTO });
+    toggleContainersState({ type: "TOGGLE_AUTO" });
 
     if (currentContainersState.toBeReset) {
-      toggleContainersState({ type: TOGGLE.TOBERESET, payload: false });
+      toggleContainersState({ type: "TOGGLE_RESET", payload: false });
       return;
     }
-    toggleContainersState({ type: TOGGLE.TOBERESET, payload: true });
+    toggleContainersState({ type: "TOGGLE_RESET", payload: true });
   };
-  
+
   const buttonActions = {
     toggleSidebar: toggleSidebar,
     toggleTheme: toggleTheme,
   };
 
   const handleResize = debounce(() => {
-    console.log("resize");
+    // console.log("resize");
     const newBrowserWidth = window.innerWidth;
     if (newBrowserWidth <= 768) {
       setWindowSmall(true);
     } else {
       setWindowSmall(false);
     }
-  }, 150);
+  }, 100);
 
   useEffect(() => {
+    // console.log("only once");
+    if (isWindowSmall) {
+      toggleContainersState({ type: "SHOWN_AND_CONTRACTED" });
+    } else {
+      toggleContainersState({ type: "HIDDEN_AND_EXPANDED" });
+    }
+  }, []);
+
+  useEffect(() => {
+    // console.log("useEffect ver 2");
+    window.addEventListener("resize", handleResize);
+
     handleResize();
 
-    // automatic toggle sidebar on window resize
     if (currentContainersState.isAuto) {
-      toggleContainersState({ type: TOGGLE.BOTH });
+      // console.log("auto");
+      toggleContainersState({ type: "TOGGLE_BOTH" });
     }
 
     // after manual toggle sidebar, reset auto toggle
     if (currentContainersState.toBeReset) {
       if (!isWindowSmall) {
-        toggleContainersState({ type: TOGGLE.MAINCONTAINER });
+        toggleContainersState({ type: "TOGGLE_MAIN_CONTAINER" });
       }
-      toggleContainersState({ type: TOGGLE.AUTO });
-      toggleContainersState({ type: TOGGLE.TOBERESET, payload: false });
+      toggleContainersState({ type: "TOGGLE_AUTO" });
+      toggleContainersState({ type: "TOGGLE_RESET", payload: false });
     }
 
-    window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [isWindowSmall]);
 
@@ -109,59 +113,75 @@ export default function App() {
   );
 }
 
-const TOGGLE = {
-  SIDEBAR: "toggleSidebar",
-  MAINCONTAINER: "toggleMainContainer",
-  BOTH: "toggleBoth",
-  AUTO: "toggleAuto",
-  TOBERESET: "toggleReset",
+const initialContainersState: containerState = {
+  sidebarMenu: "shown",
+  mainContainer: "contracted",
+  isAuto: true,
+  toBeReset: false,
 };
 
 interface containerState {
-  sidebarMenu: "hidden" | "";
-  mainContainer: "expanded" | "";
+  sidebarMenu: "hidden" | "shown";
+  mainContainer: "expanded" | "contracted";
   isAuto: boolean;
   toBeReset: boolean | undefined;
 }
 
-interface ToggleSidebarAction {
-  type: string;
-  payload?: boolean;
-}
+type Toggle =
+  | { type: "TOGGLE_SIDEBAR" }
+  | { type: "TOGGLE_MAIN_CONTAINER" }
+  | { type: "TOGGLE_BOTH" }
+  | { type: "TOGGLE_AUTO" }
+  | { type: "TOGGLE_RESET"; payload: boolean }
+  | { type: "SHOWN_AND_CONTRACTED" }
+  | { type: "HIDDEN_AND_EXPANDED" };
 
 function containerReducer(
   state: containerState,
-  toggleContainersState: ToggleSidebarAction
+  toggle: Toggle
 ): containerState {
-  const { type, payload } = toggleContainersState;
-
-  switch (type) {
-    case TOGGLE.TOBERESET:
+  switch (toggle.type) {
+    case "TOGGLE_RESET":
       return {
         ...state,
-        toBeReset: payload,
+        toBeReset: toggle.payload,
       };
-    case TOGGLE.AUTO:
+    case "TOGGLE_AUTO":
       return {
         ...state,
         isAuto: !state.isAuto,
       };
-    case TOGGLE.SIDEBAR:
+    case "TOGGLE_SIDEBAR":
       return {
         ...state,
-        sidebarMenu: state.sidebarMenu === "hidden" ? "" : "hidden",
+        sidebarMenu: state.sidebarMenu === "hidden" ? "shown" : "hidden",
       };
-    case TOGGLE.MAINCONTAINER:
+    case "TOGGLE_MAIN_CONTAINER":
       return {
         ...state,
-        mainContainer: state.mainContainer === "expanded" ? "" : "expanded",
+        mainContainer:
+          state.mainContainer === "expanded" ? "contracted" : "expanded",
       };
-    case TOGGLE.BOTH:
+    case "TOGGLE_BOTH":
       return {
         ...state,
-        sidebarMenu: state.sidebarMenu === "hidden" ? "" : "hidden",
-        mainContainer: state.mainContainer === "expanded" ? "" : "expanded",
+        sidebarMenu: state.sidebarMenu === "hidden" ? "shown" : "hidden",
+        mainContainer:
+          state.mainContainer === "expanded" ? "contracted" : "expanded",
       };
+    case "SHOWN_AND_CONTRACTED":
+      return {
+        ...state,
+        sidebarMenu: "shown",
+        mainContainer: "contracted",
+      };
+    case "HIDDEN_AND_EXPANDED":
+      return {
+        ...state,
+        sidebarMenu: "hidden",
+        mainContainer: "expanded",
+      };
+
     default:
       return state;
   }
