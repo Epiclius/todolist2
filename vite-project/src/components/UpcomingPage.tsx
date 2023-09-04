@@ -1,6 +1,4 @@
 // Home.js
-import React from "react";
-
 function UpcomingPage() {
   return (
     <>  

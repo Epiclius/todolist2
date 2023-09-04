@@ -1,12 +1,11 @@
 // Home.js
-import { useContext, useState, useRef } from "react";
+import { useContext, useState } from "react";
 import { ThemeContext } from "./ThemeProvider";
 import { BsCircle, BsCheck2Circle } from "react-icons/Bs";
 import { AiFillDelete, AiFillEdit } from "react-icons/Ai";
 import Button from "./Button";
 import { TaskInterface } from "./Task";
 import { DispatchContext } from "./TaskReducerProvider";
-import flatpickr from "flatpickr";
 
 export default function TaskContainer({
   Task,

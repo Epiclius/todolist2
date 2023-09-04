@@ -24,7 +24,7 @@ export default function TaskEditContainer({
 }) {
   const { theme } = useContext(ThemeContext);
 
-  const { taskState, dispatch } = useContext(DispatchContext);
+  const { dispatch } = useContext(DispatchContext);
 
   const [title, setTitle] = useState(Task.title);
   const [description, setDescription] = useState(Task.description);
