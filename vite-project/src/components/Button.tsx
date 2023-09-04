@@ -6,13 +6,24 @@ interface Props {
   text?: string;
   extraClass?: string;
   onClick?: () => void;
+  reference?: React.RefObject<HTMLButtonElement> | null;
+  onMouseEvents?: {
+    onMouseEnter: () => void;
+    onMouseLeave: () => void;
+  };
 }
 
-const Button = ({ icon, text, extraClass, onClick }: Props) => {
+const Button = ({ icon, text, extraClass, reference = null, onClick, onMouseEvents }: Props) => {
   const { theme } = useContext(ThemeContext);
 
   return (
-    <button type="button" className={`btn ${extraClass} ${theme}`} onClick={onClick}>
+    <button
+      {...onMouseEvents}
+      ref={reference}
+      type="button"
+      className={`btn ${extraClass} ${theme}`}
+      onClick={onClick}
+    >
       {icon} {text}
     </button>
   );

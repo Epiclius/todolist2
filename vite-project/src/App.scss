@@ -157,6 +157,17 @@ a {
     }
   }
 
+  &.check-box {
+    transition: $transition;
+    &.hovered {
+
+      .react-icons {
+        color: $color-2;
+        scale: 1.2; 
+      }
+    }
+  }
+
   &.schedule-button {
     @include edit-button();
     display: flex;

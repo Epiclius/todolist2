@@ -92,6 +92,13 @@ a {
 .btn.dark .react-icons {
   color: #e5989b;
 }
+.btn.check-box {
+  transition: all 0.2s ease-in-out;
+}
+.btn.check-box.hovered .react-icons {
+  color: #ffb4a2;
+  scale: 1.2;
+}
 .btn.schedule-button {
   padding: 0.4rem 0.8rem;
   font-size: 0.9rem;

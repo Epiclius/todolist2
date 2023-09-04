@@ -13,7 +13,7 @@ export default function Task() {
 
   const [editModes, setEditModes] = useState(taskState.tasks.map(() => false));
   const [showAddTask, setShowAddTask] = useState(false);
-  
+
   const toggleAddTask = () => {
     setShowAddTask(!showAddTask);
   };
@@ -98,7 +98,6 @@ export default function Task() {
           onClick={toggleAddTask}
         ></Button>
       )}
-      
     </DispatchProvider>
   );
 }
@@ -142,17 +141,10 @@ function taskReducer(state: taskState, action: ToggleTask): taskState {
     case "ADD_TASK":
       console.log("ADD_TASK");
       return {
-        // tasks: [...state.tasks, action.payload],
         tasks: state.tasks.concat(action.payload),
       };
     case "DELETE_TASK":
       console.log("DELETE_TASK");
-      // if the id not found
-      if (state.tasks.findIndex((task) => task.id === action.payload) === -1) {
-        console.log("NOT FOUND: ", action.payload)
-        return state;
-      }
-
       return {
         tasks: state.tasks.filter((task) => task.id !== action.payload),
       };
