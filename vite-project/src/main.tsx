@@ -7,7 +7,7 @@ import { IconContext } from "react-icons";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   // <React.StrictMode>
   <IconContext.Provider value={{ className: "react-icons" }}>
-    <ThemeProvider>
+    <ThemeProvider dummy="ThemePR O V I D E R">
       <App />
     </ThemeProvider>
   </IconContext.Provider>

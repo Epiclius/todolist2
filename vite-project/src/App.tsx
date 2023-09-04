@@ -100,8 +100,7 @@ export default function App() {
         </div>
 
         <div
-          id="container"
-          className={`${theme} ${currentContainersState.mainContainer}`}
+          className={`container ${theme} ${currentContainersState.mainContainer}`}
         >
           <Routes>
             <Route path="/" element={<TodayPage />} />
