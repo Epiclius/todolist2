@@ -89,7 +89,7 @@ export default function App() {
           id="sidebarMenu"
           className={`${theme} ${currentContainersState.sidebarMenu}`}
         >
-          <Link to="/todolist2/today">
+          <Link to="/todolist2/">
             <span>Today</span>
           </Link>
           <Link to="/todolist2/upcoming">
@@ -103,7 +103,7 @@ export default function App() {
           className={`container ${theme} ${currentContainersState.mainContainer}`}
         >
           <Routes>
-            <Route path="/todolist2/today" element={<TodayPage />} />
+            <Route path="/todolist2/" element={<TodayPage />} />
             <Route path="/todolist2/upcoming" element={<UpcomingPage />} />
           </Routes>
         </div>
