@@ -103,7 +103,7 @@ export default function App() {
           className={`container ${theme} ${currentContainersState.mainContainer}`}
         >
           <Routes>
-            <Route path="/" element={<TodayPage />} />
+            <Route path="/todolist2" element={<TodayPage />} />
             <Route path="/upcoming" element={<UpcomingPage />} />
           </Routes>
         </div>
