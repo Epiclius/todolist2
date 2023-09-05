@@ -38,27 +38,27 @@ export default function Task() {
     });
   };
 
-  const newTask: TaskInterface = {
-    id: 1,
-    title: "Clean your room",
-    description: "Clean your room",
-    priority: 1,
-    scheduleDateTime: new Date("2023-09-05T14:10:00"),
-  };
-  const newTask2: TaskInterface = {
-    id: 2,
-    title: "Clean your room",
-    description: "Clean your room",
-    priority: 1,
-    scheduleDateTime: null,
-  };
+  // const newTask: TaskInterface = {
+  //   id: 1,
+  //   title: "Clean your room",
+  //   description: "Clean your room",
+  //   priority: 1,
+  //   scheduleDateTime: new Date("2023-09-05T14:10:00"),
+  // };
+  // const newTask2: TaskInterface = {
+  //   id: 2,
+  //   title: "Clean your room",
+  //   description: "Clean your room",
+  //   priority: 1,
+  //   scheduleDateTime: null,
+  // };
 
   console.log("taskState.tasks:", taskState.tasks);
 
-  useEffect(() => {
-    dispatch({ type: "ADD_TASK", payload: newTask });
-    dispatch({ type: "ADD_TASK", payload: newTask2 });
-  }, []);
+  // useEffect(() => {
+  //   dispatch({ type: "ADD_TASK", payload: newTask });
+  //   dispatch({ type: "ADD_TASK", payload: newTask2 });
+  // }, []);
 
   useEffect(() => {
     const storedTasks = JSON.parse(localStorage.getItem("tasks")?? "[]");
