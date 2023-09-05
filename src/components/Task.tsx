@@ -60,9 +60,16 @@ export default function Task() {
     dispatch({ type: "ADD_TASK", payload: newTask2 });
   }, []);
 
-  // useEffect(() => {
-  //   console.log("Task: taskState.tasks:", taskState.tasks);
-  // }, [taskState]);
+  useEffect(() => {
+    const storedTasks = JSON.parse(localStorage.getItem("tasks")?? "[]");
+    dispatch({ type: "ADD_TASK", payload: storedTasks });
+  }, []);
+
+
+  useEffect(() => {
+    // save tasks to local storage
+    localStorage.setItem("tasks", JSON.stringify(taskState.tasks));
+  }, [taskState]);
 
   return (
     <DispatchProvider taskState={taskState} dispatch={dispatch}>
