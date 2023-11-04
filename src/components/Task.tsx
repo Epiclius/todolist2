@@ -1,18 +1,27 @@
 // Home.js
-import { useEffect, useReducer, useState } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import TaskContainer from "./TaskContainer";
 import { DispatchProvider } from "./TaskReducerProvider.tsx";
 import TaskEditContainer from "./TaskEditorContainer";
 import Button from "./Button.tsx";
 import { AiOutlinePlus } from "react-icons/Ai";
-
-// TO DO: the buttons in TaskContainer and TaskEditContainer should toggle the edit container
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ThemeContext } from "./ThemeProvider.tsx";
 
 export default function Task() {
+  const { theme } = useContext(ThemeContext);
   const [taskState, dispatch] = useReducer(taskReducer, { tasks: [] });
-
   const [editModes, setEditModes] = useState(taskState.tasks.map(() => false));
   const [showAddTask, setShowAddTask] = useState(false);
+
+  const tasksToast = (message: string) => {
+    console.log("generating toast for stored task");
+    toast(message, {
+      toastId: 2,
+      theme: theme === "" ? "light" : "dark",
+    });
+  };
 
   const toggleAddTask = () => {
     setShowAddTask(!showAddTask);
@@ -21,11 +30,11 @@ export default function Task() {
   const newTaskID = Math.max(...taskState.tasks.map((task) => task.id), 0) + 1;
   console.log("newTaskID: ", newTaskID);
 
-  const dummyTask = {
+  const addendTask = {
     id: newTaskID,
     title: "",
     description: "",
-    priority: 1,
+    priority: "high",
     scheduleDateTime: null,
   };
 
@@ -38,41 +47,43 @@ export default function Task() {
     });
   };
 
-  // const newTask: TaskInterface = {
-  //   id: 1,
-  //   title: "Clean your room",
-  //   description: "Clean your room",
-  //   priority: 1,
-  //   scheduleDateTime: new Date("2023-09-05T14:10:00"),
-  // };
-  // const newTask2: TaskInterface = {
-  //   id: 2,
-  //   title: "Clean your room",
-  //   description: "Clean your room",
-  //   priority: 1,
-  //   scheduleDateTime: null,
-  // };
-
-  console.log("taskState.tasks:", taskState.tasks);
-
-  // useEffect(() => {
-  //   dispatch({ type: "ADD_TASK", payload: newTask });
-  //   dispatch({ type: "ADD_TASK", payload: newTask2 });
-  // }, []);
-
   useEffect(() => {
-    const storedTasks = JSON.parse(localStorage.getItem("tasks")?? "[]");
+
+    
+    
+    // localStorage.clear();
+    
+
+    
+    console.log("loading tasks from local storage");
+    const storedTasks = JSON.parse(localStorage.getItem("tasks") ?? "[]");
     dispatch({ type: "ADD_TASK", payload: storedTasks });
+    if (storedTasks.length === 0) {
+      tasksToast("No stored tasks found");
+    } else {
+      tasksToast(`${storedTasks.length} tasks loaded`);
+    }
   }, []);
 
-
   useEffect(() => {
-    // save tasks to local storage
     localStorage.setItem("tasks", JSON.stringify(taskState.tasks));
   }, [taskState]);
 
   return (
     <DispatchProvider taskState={taskState} dispatch={dispatch}>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        className={`toast-override`}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+
       <ul className="task-list">
         {taskState.tasks.map((task, index) =>
           editModes[index] ? (
@@ -94,7 +105,7 @@ export default function Task() {
       {showAddTask ? (
         <TaskEditContainer
           forAddingTask={true}
-          Task={dummyTask}
+          Task={addendTask}
           toggle={toggleAddTask}
         />
       ) : (
@@ -117,7 +128,7 @@ export interface TaskInterface {
   id: number;
   title: string;
   description: string;
-  priority: number;
+  priority: string;
   scheduleDateTime: Date | null;
 }
 

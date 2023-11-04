@@ -24,12 +24,17 @@ export default function App() {
       toggleContainersState({ type: "TOGGLE_BOTH" });
     }
 
+    if (currentContainersState.overlay === "overlay-active") {
+      toggleContainersState({ type: "TOGGLE_OVERLAY" });
+    }
+
     toggleContainersState({ type: "TOGGLE_AUTO" });
 
     if (currentContainersState.toBeReset) {
       toggleContainersState({ type: "TOGGLE_RESET", payload: false });
       return;
     }
+
     toggleContainersState({ type: "TOGGLE_RESET", payload: true });
   };
 
@@ -39,17 +44,15 @@ export default function App() {
   };
 
   const handleResize = debounce(() => {
-    // console.log("resize");
     const newBrowserWidth = window.innerWidth;
     if (newBrowserWidth <= 768) {
       setWindowSmall(true);
     } else {
       setWindowSmall(false);
     }
-  }, 100);
+  }, 50);
 
   useEffect(() => {
-    // console.log("only once");
     if (isWindowSmall) {
       toggleContainersState({ type: "SHOWN_AND_CONTRACTED" });
     } else {
@@ -58,13 +61,43 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    // console.log("useEffect ver 2");
+    if (!isWindowSmall) {
+      return;
+    }
+    if (currentContainersState.sidebarMenu === "hidden") {
+      return;
+    }
+    if (currentContainersState.overlay === "overlay-active") {
+      return;
+    }
+ 
+    toggleContainersState({ type: "TOGGLE_OVERLAY" });
+
+    const handleClick = () => {
+      toggleSidebar();
+      toggleContainersState({ type: "TOGGLE_OVERLAY" });
+    };
+
+    const mainContainer = document.getElementById("container");
+
+    if (mainContainer) {
+      mainContainer.addEventListener("click", handleClick);
+    }
+
+    return () => {
+      if (mainContainer) {
+        mainContainer.removeEventListener("click", handleClick);
+      }
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [currentContainersState.sidebarMenu]);
+
+  useEffect(() => {
     window.addEventListener("resize", handleResize);
 
     handleResize();
 
     if (currentContainersState.isAuto) {
-      // console.log("auto");
       toggleContainersState({ type: "TOGGLE_BOTH" });
     }
 
@@ -77,7 +110,13 @@ export default function App() {
       toggleContainersState({ type: "TOGGLE_RESET", payload: false });
     }
 
-    return () => window.removeEventListener("resize", handleResize);
+    if (currentContainersState.overlay === "overlay-active") {
+      toggleContainersState({ type: "TOGGLE_OVERLAY" });
+    }
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, [isWindowSmall]);
 
   return (
@@ -98,9 +137,10 @@ export default function App() {
 
           <span className="projects"> some text </span>
         </div>
-        
+
         <div
-          className={`container ${theme} ${currentContainersState.mainContainer}`}
+          id="container"
+          className={`${theme} ${currentContainersState.mainContainer} overlay ${currentContainersState.overlay}`}
         >
           <Routes>
             <Route path="/todolist2/" element={<TodayPage />} />
@@ -112,19 +152,22 @@ export default function App() {
   );
 }
 
+interface containerState {
+  sidebarMenu: "hidden" | "shown";
+  mainContainer: "expanded" | "contracted";
+  overlay: "overlay-deactive" | "overlay-active";
+  isAuto: boolean;
+  toBeReset: boolean | undefined;
+}
+
 const initialContainersState: containerState = {
   sidebarMenu: "shown",
   mainContainer: "contracted",
+  overlay: "overlay-deactive",
   isAuto: true,
   toBeReset: false,
 };
 
-interface containerState {
-  sidebarMenu: "hidden" | "shown";
-  mainContainer: "expanded" | "contracted";
-  isAuto: boolean;
-  toBeReset: boolean | undefined;
-}
 
 type Toggle =
   | { type: "TOGGLE_SIDEBAR" }
@@ -132,6 +175,7 @@ type Toggle =
   | { type: "TOGGLE_BOTH" }
   | { type: "TOGGLE_AUTO" }
   | { type: "TOGGLE_RESET"; payload: boolean }
+  | { type: "TOGGLE_OVERLAY"}
   | { type: "SHOWN_AND_CONTRACTED" }
   | { type: "HIDDEN_AND_EXPANDED" };
 
@@ -144,6 +188,11 @@ function containerReducer(
       return {
         ...state,
         toBeReset: toggle.payload,
+      };
+    case "TOGGLE_OVERLAY":
+      return {
+        ...state,
+        overlay: state.overlay === "overlay-deactive" ? "overlay-active" : "overlay-deactive",
       };
     case "TOGGLE_AUTO":
       return {

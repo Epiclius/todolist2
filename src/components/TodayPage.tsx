@@ -1,9 +1,6 @@
-// Home.js
-// import React from "react";
 import Task from "./Task";
 import { ThemeContext } from "./ThemeProvider";
 import { useContext, useEffect } from "react";
-import "flatpickr/dist/flatpickr.min.css";
 import { DispatchContext } from "./TaskReducerProvider";
 
 function TodayPage() {

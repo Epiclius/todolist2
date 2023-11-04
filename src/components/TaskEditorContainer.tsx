@@ -7,11 +7,8 @@ import { TaskInterface } from "./Task";
 import { DispatchContext } from "./TaskReducerProvider";
 import DescriptionInput from "./TaskDescriptionInput";
 import DatePicker from "./DatePicker";
-
-// React.Dispatch<ToggleTask>
-// () => dispatch?.dispatch({ type: "EDIT_TASK", payload: Task})
-
-// export default function TaskEditContainer({ task, onClick }: { task: TaskInterface, onClick: () => void }) {
+import { BiSolidFlag } from "react-icons/Bi";
+import DropDrown from "./DropDownMenu";
 
 export default function TaskEditContainer({
   Task,
@@ -33,6 +30,11 @@ export default function TaskEditContainer({
   );
   const [proceedDisabled, setProceedDisabled] = useState("");
 
+  const handlePrioritySelection = (item: string) => {
+    Task.priority = item;
+    console.log("priority: ", Task.priority);
+  };
+
   const handleTitleChange = (newTitle: string) => {
     setTitle(newTitle);
 
@@ -49,6 +51,7 @@ export default function TaskEditContainer({
 
   const handleScheduleChange = (newSchedule: Date | null) => {
     setScheduleDateTime(newSchedule);
+    console.log("newSchedule: ", newSchedule);
   };
 
   const handleProceedClick = () => {
@@ -106,9 +109,16 @@ export default function TaskEditContainer({
           ></Button>
         )}
 
+        <DropDrown
+          icon={<BiSolidFlag />}
+          defaultSelection={Task.priority}
+          selection={["high", "medium", "low"]}
+          select={handlePrioritySelection}
+        />
+
         <DatePicker
           scheduleDateTime={Task.scheduleDateTime}
-          onChange={handleScheduleChange}
+          onScheduleChange={handleScheduleChange}
         />
 
         <Button

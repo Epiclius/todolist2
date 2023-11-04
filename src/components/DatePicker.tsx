@@ -1,86 +1,283 @@
 import { useContext, useEffect, useRef, useState } from "react";
+
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
+
 import { ThemeContext } from "./ThemeProvider";
-import { BsFillCalendarDateFill } from "react-icons/Bs";
 import Button from "./Button";
 import { FaTimes } from "react-icons/Fa";
-
-// require("flatpickr/dist/themes/dark.css");
+import { AiFillCalendar } from "react-icons/Ai";
+import { BiSolidTime } from "react-icons/Bi";
+import TimePicker from "rc-time-picker";
+import "rc-time-picker/assets/index.css";
+import moment from "moment";
+import { Tooltip, TooltipTrigger, TooltipContent } from "./ToolTip";
 
 interface Props {
   scheduleDateTime: Date | null;
-  onChange: (newDate: Date | null) => void;
+  onScheduleChange: (newDate: Date | null) => void;
 }
 
-const DatePicker = ({ scheduleDateTime, onChange }: Props) => {
-  const datePickerRef = useRef(null);
-  const { theme, dummy } = useContext(ThemeContext);
-
-  console.log("dummy inside datepicker:", dummy);
-
-  // State variable to hold the selected date (including a "No Date" option)
+const DatePicker = ({ scheduleDateTime, onScheduleChange }: Props) => {
+  const { theme } = useContext(ThemeContext);
+  const datePickerContainerRef = useRef<HTMLDivElement>(null);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [selectedDateString, setSelectedDateString] =
+    useState<string>("No Date");
+  const [time, setTime] = useState<string>(
+    scheduleDateTime === null
+      ? "11:59 PM"
+      : new Date(scheduleDateTime).toLocaleString("en-US", {
+          hour: "numeric",
+          minute: "numeric",
+          hour12: true,
+        })
+  );
   const [selectedDate, setSelectedDate] = useState<Date | null>(
     scheduleDateTime === null ? null : new Date(scheduleDateTime)
-  ); // Initialize as null to represent "No Date"
+  );
+
+  let datePickr: flatpickr.Instance;
+
+  const toggleDatePicker = () => {
+    console.log("current selected schedule date: ", selectedDate);
+    setShowDatePicker(!showDatePicker);
+  };
+
+  const toggleTimePicker = () => {
+    setTime("11:59 PM");
+    setShowTimePicker(!showTimePicker);
+  };
+
+  const handleNoDateClick = () => {
+    setSelectedDate(null);
+    setTime("11:59 PM");
+    onScheduleChange(null);
+    setShowTimePicker(false);
+  };
+  
+  const handleNoTimeClick = () => {
+    let defaultTime = new Date(selectedDate as Date);
+    defaultTime.setHours(23);
+    defaultTime.setMinutes(59);
+    
+    console.log("defaultTime: ", defaultTime);
+    setSelectedDate(defaultTime);
+
+    onScheduleChange(defaultTime);
+
+    toggleTimePicker();
+  };
 
   useEffect(() => {
-    if (datePickerRef.current) {
-      const options = {
-        enableTime: true,
-        dateFormat: "M j, Y h:i K",
+    if (datePickerContainerRef.current) {
+      const dateOptions = {
+        disableMobile: true, // problemo
+        clickOpens: true,
+        dateFormat: "M j, Y",
+        enableTime: false,
+        position: "below center",
+        monthSelectorType: "static",
         minDate: "today",
         defaultDate: selectedDate ? selectedDate : "",
+        positionElement: datePickerContainerRef.current,
         onClose: function (selectedDates: Date[]) {
-          setSelectedDate(selectedDates[0] || null); // Update to the selected date or null
-          onChange(selectedDates[0] || null);
-          console.log("selectedDates:", selectedDates[0] || null);
+          setSelectedDate(
+            selectedDates[0]
+              ? new Date(
+                  moment(selectedDates[0]).format("YYYY-MM-DD") + " " + time
+                )
+              : null
+          );
+          onScheduleChange(
+            selectedDates[0]
+              ? new Date(
+                  moment(selectedDates[0]).format("YYYY-MM-DD") + " " + time
+                )
+              : null
+          );
+        },
+        onChange: function () {
+          datePickr.open();
         },
       };
 
-      flatpickr(datePickerRef.current, options);
+      datePickr = flatpickr(datePickerContainerRef.current, dateOptions);
+    }
+
+    // careful 
+    if (showDatePicker && datePickr) {
+      datePickr.open();
+    }
+
+    if (!showTimePicker) {
+    } else {
+
+    }
+
+    if (time === "11:59 PM") {
+      setShowTimePicker(false);
+    } else {
+      setShowTimePicker(true);
+    }
+
+    return () => {
+      if (datePickr) {
+        datePickr.destroy();
+      }
+    };
+  }, [showDatePicker]);
+
+  useEffect(() => {
+    if (!selectedDate) {
+      setSelectedDateString("No Date");
+    } else {
+      const time = selectedDate.toLocaleString("en-US", {
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      });
+
+      const date = selectedDate.toLocaleString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+
+      const currentDate = new Date();
+      const tomorrowDate = new Date(currentDate);
+      tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+
+      const currentDateFormat = currentDate.toLocaleString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+
+      const tomorrowDateFormat = tomorrowDate.toLocaleString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+
+      if (date.includes(currentDateFormat)) {
+        if (time === "11:59 PM") {
+          setSelectedDateString("Today");
+        } else {
+          setSelectedDateString(`Today`);
+        }
+      } else if (date.includes(tomorrowDateFormat)) {
+        setSelectedDateString(`Tomorrow`);
+      } else {
+        setSelectedDateString(`${date}`);
+      }
     }
   }, [selectedDate]);
 
-  // Function to handle cancel button click
-  const handleCancelClick = () => {
-    setSelectedDate(null); // Set selectedDate to null when "No Date" is selected
-    onChange(null);
-    console.log("selectedDates:", selectedDate);
-  };
-
   return (
-    <div className={`${theme} date-input`} ref={datePickerRef}>
-      <div className="date-picker-container"></div>
-      <BsFillCalendarDateFill />
-      <input
-        type="text"
-        className={`${theme} datePickerInput`}
-        placeholder="Select a date"
-        readOnly
-        id="selectedDateInput"
-        value={
-          selectedDate
-            ? selectedDate.toLocaleString("en-US", {
-                month: "short",
-                day: "numeric",
-                year: "numeric",
-                hour: "numeric",
-                minute: "numeric",
-                hour12: true,
-              })
-            : "No Date" // Display "No Date" if selectedDate is null
-        }
-      />
-      <Button
-        icon={<FaTimes />}
-        extraClass={`no-schedule-button ${theme}`}
-        onClick={handleCancelClick}
-      />
-    </div>
+    <Tooltip>
+      <div ref={datePickerContainerRef} className="date-picker-container">
+        <TooltipTrigger>
+          <Button
+            icon={<AiFillCalendar />}
+            onClick={toggleDatePicker}
+            extraClass={`date-picker-button ${theme}`}
+          />
+        </TooltipTrigger>
+        <TooltipContent className={`Tooltip ${theme} schedule-tooltip`}>
+          <span>scheduled -</span> {selectedDateString}
+          {time === "11:59 PM" ? "" : ` `}
+          {time === "11:59 PM" ? "" : <span>@</span>}
+          {time === "11:59 PM" ? "" : time}
+        </TooltipContent>
+
+        {showDatePicker && (
+          <>
+            <div
+              className="modal-overlay"
+              onClick={() => {
+                setShowDatePicker(false);
+              }}
+            />
+            <div className={`date-picker-modal ${theme}`}>
+              <input
+                type="text"
+                className={`${theme} datePickerInput`}
+                readOnly
+                id="selectedDateInput"
+                value={
+                  selectedDate
+                    ? selectedDate.toLocaleString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })
+                    : "No Date"
+                }
+              />
+              {selectedDate && (
+                <>
+                  <Button
+                    icon={<FaTimes />}
+                    extraClass={`no-schedule-button ${theme}`}
+                    onClick={handleNoDateClick}
+                  />
+                  <span className="picker-divider">|</span>
+                  {showTimePicker ? (
+                    <>
+                      <div className="App">
+                        <TimePicker
+                          placeholder={time ? time : "11:59 PM"}
+                          use12Hours
+                          showSecond={false}
+                          focusOnOpen={true}
+                          format="hh:mm A"
+                          onChange={(e) => {
+                            setTime(e.format("LT"));
+                          }}
+                          onClose={() => {
+                            setSelectedDate(
+                              new Date(
+                                moment(selectedDate).format("YYYY-MM-DD") +
+                                " " +
+                                time
+                                )
+                              );
+                                
+                            // onScheduleChange with new time
+                            onScheduleChange(
+                              new Date(
+                                moment(selectedDate).format("YYYY-MM-DD") +
+                                " " +
+                                time
+                                )
+                              );
+                            
+                            console.log(
+                              "selectedDate inside TimePicker:",
+                              selectedDate
+                            );
+                          }}
+                        />
+                      </div>
+                      <Button
+                        icon={<FaTimes />}
+                        extraClass={`no-schedule-button ${theme}`}
+                        onClick={handleNoTimeClick}
+                      />
+                    </>
+                  ) : (
+                    <Button icon={<BiSolidTime />} onClick={toggleTimePicker} />
+                  )}
+                </>
+              )}
+            </div>
+          </>
+        )}
+      </div>
+    </Tooltip>
   );
 };
-
-
 
 export default DatePicker;
