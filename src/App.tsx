@@ -1,5 +1,4 @@
-import { useEffect, useReducer, useState, useContext } from "react";
-
+import React, { useEffect, useReducer, useState, useContext } from "react";
 import { debounce } from "lodash";
 import { ThemeContext } from "./components/ThemeProvider";
 import "./App.css";
@@ -7,6 +6,12 @@ import NavBar from "./components/Navbar";
 import { Link, Route, Routes, BrowserRouter } from "react-router-dom";
 import TodayPage from "./components/TodayPage";
 import UpcomingPage from "./components/UpcomingPage";
+
+const WINDOWSIZE_SMALL = 768;
+
+export const WindowSizeContext = React.createContext(
+  window.innerWidth <= WINDOWSIZE_SMALL ? true : false
+);
 
 export default function App() {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -45,7 +50,7 @@ export default function App() {
 
   const handleResize = debounce(() => {
     const newBrowserWidth = window.innerWidth;
-    if (newBrowserWidth <= 768) {
+    if (newBrowserWidth <= WINDOWSIZE_SMALL) {
       setWindowSmall(true);
     } else {
       setWindowSmall(false);
@@ -120,7 +125,7 @@ export default function App() {
   }, [isWindowSmall]);
 
   return (
-    <>
+    <WindowSizeContext.Provider value={isWindowSmall}>
       <NavBar functions={buttonActions} />
 
       <BrowserRouter>
@@ -148,7 +153,7 @@ export default function App() {
           </Routes>
         </div>
       </BrowserRouter>
-    </>
+    </WindowSizeContext.Provider>
   );
 }
 

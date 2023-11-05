@@ -260,6 +260,9 @@ a {
   scale: 1.2;
 }
 .btn.schedule-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 0.4rem 0.8rem;
   font-size: 0.9rem;
   display: inline-block;
@@ -270,6 +273,11 @@ a {
   color: #69464d;
   /* https://smoothshadows.com/#djEsMSw1LDAuMSw0LDQsMCwjMzYzMjM5LCNmM2Y0ZjYsI2ZmZmZmZiwy */
   box-shadow: 0px 0px 0px rgba(54, 50, 57, 0.02), 0px 1px 1px rgba(54, 50, 57, 0.04), 0px 1px 1px rgba(54, 50, 57, 0.06), 0px 3px 3px rgba(54, 50, 57, 0.08), 0px 4px 4px rgba(54, 50, 57, 0.1);
+}
+.btn.schedule-button .react-icons {
+  scale: 1.2;
+  display: flex;
+  align-self: center;
 }
 .btn.schedule-button.dark {
   color: #e5989b;
@@ -292,6 +300,9 @@ a {
   color: #69464d;
 }
 .btn.cancel-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 0.4rem 0.8rem;
   font-size: 0.9rem;
   display: inline-block;
@@ -299,13 +310,32 @@ a {
   background-color: rgba(77, 59, 64, 0.7);
   color: rgba(240, 248, 255, 0.7);
 }
+.btn.cancel-button .react-icons {
+  scale: 1.2;
+  display: flex;
+  align-self: center;
+}
+.btn.cancel-button .react-icons {
+  color: rgba(240, 248, 255, 0.7);
+}
 .btn.save-button {
   background-color: #b34d4d;
   color: aliceblue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 0.4rem 0.8rem;
   font-size: 0.9rem;
   display: inline-block;
   margin-left: 0.4rem;
+}
+.btn.save-button .react-icons {
+  color: rgba(240, 248, 255, 0.7);
+}
+.btn.save-button .react-icons {
+  scale: 1.2;
+  display: flex;
+  align-self: center;
 }
 .btn.save-button:hover {
   outline: 1px solid aliceblue;

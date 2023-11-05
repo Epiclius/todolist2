@@ -73,11 +73,10 @@ const DatePicker = ({ scheduleDateTime, onScheduleChange }: Props) => {
   useEffect(() => {
     if (datePickerContainerRef.current) {
       const dateOptions = {
-        disableMobile: true, // problemo
         clickOpens: true,
         dateFormat: "M j, Y",
         enableTime: false,
-        position: "below center",
+        position: "auto center",
         monthSelectorType: "static",
         minDate: "today",
         defaultDate: selectedDate ? selectedDate : "",

@@ -7,8 +7,10 @@ import { TaskInterface } from "./Task";
 import { DispatchContext } from "./TaskReducerProvider";
 import DescriptionInput from "./TaskDescriptionInput";
 import DatePicker from "./DatePicker";
-import { BiSolidFlag } from "react-icons/Bi";
+import { BiSolidFlag, BiSolidSave } from "react-icons/Bi";
+import { MdAddTask, MdCancel } from "react-icons/Md";
 import DropDrown from "./DropDownMenu";
+import { WindowSizeContext } from "../App";
 
 export default function TaskEditContainer({
   Task,
@@ -19,6 +21,7 @@ export default function TaskEditContainer({
   toggle: () => void;
   forAddingTask?: boolean;
 }) {
+  const isWindowSmall = useContext(WindowSizeContext);
   const { theme } = useContext(ThemeContext);
 
   const { dispatch } = useContext(DispatchContext);
@@ -122,13 +125,23 @@ export default function TaskEditContainer({
         />
 
         <Button
-          text="Cancel"
+          text={isWindowSmall ? "" : "Cancel"}
+          icon={isWindowSmall ? <MdCancel /> : null}
           extraClass="cancel-button"
           onClick={toggle}
         ></Button>
 
         <Button
-          text={forAddingTask ? "Add Task" : "Save"}
+          text={isWindowSmall ? "" : forAddingTask ? "Add Task" : "Save"}
+          icon={
+            isWindowSmall ? (
+              forAddingTask ? (
+                <MdAddTask />
+              ) : (
+                <BiSolidSave />
+              )
+            ) : null
+          }
           extraClass={`save-button ${proceedDisabled}`}
           onClick={proceedDisabled === "" ? handleProceedClick : () => {}}
         ></Button>
