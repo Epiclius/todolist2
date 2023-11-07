@@ -79,11 +79,11 @@ const DatePicker = ({ scheduleDateTime, onScheduleChange }: Props) => {
         clickOpens: true,
         dateFormat: "M j, Y",
         enableTime: false,
-        position: "auto center",
-        monthSelectorType: "static",
+        // position: "'auto'",
+        // monthSelectorType: "static",
         minDate: "today",
         defaultDate: selectedDate ? selectedDate : "",
-        positionElement: datePickerContainerRef.current,
+        // positionElement: datePickerContainerRef.current,
         onClose: function (selectedDates: Date[]) {
           setSelectedDate(
             selectedDates[0]
