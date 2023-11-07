@@ -1,6 +1,4 @@
 export const formatDateToString = (schedule: Date | null) => {
-  let scheduleString = "No Date";
-  
   if (!schedule) {
     console.log("newSchedule fjalskdjfkl");
     return "No Date";
