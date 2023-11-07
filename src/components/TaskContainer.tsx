@@ -9,7 +9,6 @@ import { TaskInterface } from "./Task";
 import { DispatchContext } from "./TaskReducerProvider";
 import DropDrown from "./DropDownMenu";
 import { formatDateToString } from "./formatDateToString";
-import { set } from "lodash";
 
 interface TaskContainerProps {
   Task: TaskInterface;
