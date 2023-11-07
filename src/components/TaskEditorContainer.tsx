@@ -91,6 +91,7 @@ export default function TaskEditContainer({
         <DescriptionInput
           initialText={Task.title}
           placeholder="Task title"
+          textareaID={"titleTextArea"}
           onTextChange={handleTitleChange}
         />
       </div>
@@ -99,6 +100,7 @@ export default function TaskEditContainer({
         <DescriptionInput
           initialText={Task.description}
           placeholder="Description"
+          textareaID={"descriptionTextArea"}
           onTextChange={handleDescriptionChange}
         />
       </div>

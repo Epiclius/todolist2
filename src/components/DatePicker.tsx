@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
-
+import { formatDateToString } from "./formatDateToString";
 import { ThemeContext } from "./ThemeProvider";
 import Button from "./Button";
 import { FaTimes } from "react-icons/Fa";
@@ -34,6 +34,9 @@ const DatePicker = ({ scheduleDateTime, onScheduleChange }: Props) => {
           hour12: true,
         })
   );
+
+  console.log("scheduleDateTime DatePicker: ", scheduleDateTime)
+
   const [selectedDate, setSelectedDate] = useState<Date | null>(
     scheduleDateTime === null ? null : new Date(scheduleDateTime)
   );
@@ -129,49 +132,8 @@ const DatePicker = ({ scheduleDateTime, onScheduleChange }: Props) => {
   }, [showDatePicker]);
 
   useEffect(() => {
-    if (!selectedDate) {
-      setSelectedDateString("No Date");
-    } else {
-      const time = selectedDate.toLocaleString("en-US", {
-        hour: "numeric",
-        minute: "numeric",
-        hour12: true,
-      });
-
-      const date = selectedDate.toLocaleString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      });
-
-      const currentDate = new Date();
-      const tomorrowDate = new Date(currentDate);
-      tomorrowDate.setDate(tomorrowDate.getDate() + 1);
-
-      const currentDateFormat = currentDate.toLocaleString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      });
-
-      const tomorrowDateFormat = tomorrowDate.toLocaleString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      });
-
-      if (date.includes(currentDateFormat)) {
-        if (time === "11:59 PM") {
-          setSelectedDateString("Today");
-        } else {
-          setSelectedDateString(`Today`);
-        }
-      } else if (date.includes(tomorrowDateFormat)) {
-        setSelectedDateString(`Tomorrow`);
-      } else {
-        setSelectedDateString(`${date}`);
-      }
-    }
+    setSelectedDateString(formatDateToString(selectedDate as Date));
+    console.log("selectedDate: ", selectedDate);
   }, [selectedDate]);
 
   return (

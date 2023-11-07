@@ -25,7 +25,8 @@ a {
 
 @mixin horiz-divider($color: $color-3) {
   border-bottom: 1px solid $color;
-  margin: 10px 0;
+  margin: .4rem 0 0 0;
+  padding-bottom: .4rem;
 }
 
 @mixin edit-button() {
@@ -385,7 +386,7 @@ a {
   }
 
   &.check-box {
-    transition: $transition;
+    // transition: $transition;
     &.hovered {
       .react-icons {
         color: $color-2;
@@ -615,14 +616,14 @@ a {
       margin-top: 1rem;
       border-radius: 10px;
       padding: 1rem;
+      resize: none;
 
       &:focus {
         outline: none;
       }
 
-      resize: none;
       width: 100%;
-      height: 100px;
+      // height: 100px;
       background-color: rgba($color-1, 0.5);
 
       border: none;
@@ -705,12 +706,15 @@ a {
     transition: $transition;
     padding: 0.5rem 1rem;
     border-radius: 10px;
-    margin-bottom: 0.5rem;
 
     &.dark {
       .description {
-        color: $color-3;
-        @include horiz-divider($color: $color-4);
+        color: rgba($color-3, 80%);
+      }
+
+      .schedule-date-time {
+        color: rgba($color-3, 80%);
+        @include horiz-divider($color: rgba($color-4, 80%));
       }
     }
 
@@ -735,11 +739,46 @@ a {
     .name {
       color: $color-4;
       font-size: calc(1rem + 20%);
+      word-break: break-word;
     }
 
     .description {
       color: $color-4;
+      // @include horiz-divider;
+      padding-top: .3rem;
+      padding-left: 3rem;
+      word-break: break-word;
+    }
+
+    .schedule-date-time {
       @include horiz-divider;
+      padding-left: 2.9rem;
+      transition: $transition;
+      line-height: 0px;
+      
+      .schedule-date {
+        display: flex;
+        align-items: center;
+        font-size: .8rem;
+
+        span {
+          font-size: .8rem;
+        }
+      }
+
+      &.dark {
+        .react-icons {
+          color: rgba($color-3, 80%);
+        }
+
+        // @include horiz-divider($color: rgba($color-4, 80%));
+      }
+
+      .react-icons {
+        width: 16px;
+        margin-right: .1rem; 
+        color: $color-4;
+      }
     }
   }
 

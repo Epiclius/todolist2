@@ -2,12 +2,14 @@
 import { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "./ThemeProvider";
 import { BsCircle, BsCheck2Circle } from "react-icons/Bs";
-import { AiFillDelete, AiFillEdit } from "react-icons/Ai";
+import { AiFillDelete, AiFillEdit, AiOutlineCalendar } from "react-icons/Ai";
 import { BiSolidFlag } from "react-icons/Bi";
 import Button from "./Button";
 import { TaskInterface } from "./Task";
 import { DispatchContext } from "./TaskReducerProvider";
 import DropDrown from "./DropDownMenu";
+import { formatDateToString } from "./formatDateToString";
+import { set } from "lodash";
 
 interface TaskContainerProps {
   Task: TaskInterface;
@@ -18,6 +20,26 @@ export default function TaskContainer({ Task, toggle }: TaskContainerProps) {
   const { theme } = useContext(ThemeContext);
   const dispatch = useContext(DispatchContext);
   const [checkHoverState, setState] = useState({ isHovered: false });
+  
+  console.log("taskContainer scheduleDateTime: ", Task.scheduleDateTime)
+
+
+  const [selectedDateString, setSelectedDateString] =
+    useState<string>("No Date");
+    
+  const [schedule, setSchedule] = useState<Date | null>(
+    Task.scheduleDateTime === null ? null : new Date(Task.scheduleDateTime)
+  );
+
+  const [time, setTime] = useState<string>(
+    Task.scheduleDateTime === null
+      ? "11:59 PM"
+      : new Date(Task.scheduleDateTime).toLocaleString("en-US", {
+          hour: "numeric",
+          minute: "numeric",
+          hour12: true,
+        })
+  );
 
   const handlePrioritySelection = (item: string) => {
     Task.priority = item;
@@ -42,17 +64,35 @@ export default function TaskContainer({ Task, toggle }: TaskContainerProps) {
   };
 
   useEffect(() => {
-      const isMobile =
-        /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(
-          navigator.userAgent
-        );
-      if (isMobile) {
-        console.log("This is a mobile device.");
-        
-      } else {
-        console.log("This is not a mobile device.");
-      }
-    }, []);
+    const isMobile =
+      /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+    if (isMobile) {
+      console.log("This is a mobile device.");
+      
+    } else {
+      console.log("This is not a mobile device.");
+    }
+
+    console.log("fjal;sdj UMU L E T")
+    setSelectedDateString(formatDateToString(schedule));
+  }, []);
+
+  useEffect(() => {
+    console.log("Useeffect setSchedule and setTime: ")
+
+    setSchedule(Task.scheduleDateTime === null ? null : new Date(Task.scheduleDateTime));
+    setTime(
+      Task.scheduleDateTime === null
+        ? "11:59 PM"
+        : new Date(Task.scheduleDateTime).toLocaleString("en-US", {
+            hour: "numeric",
+            minute: "numeric",
+            hour12: true,
+          })
+    );
+  }, [Task.scheduleDateTime]);
 
   return (
     <div className={`${theme} task-container`}>
@@ -91,7 +131,19 @@ export default function TaskContainer({ Task, toggle }: TaskContainerProps) {
         </div>
       </div>
 
-      <p className={`description horiz-divider`}>{Task.description}</p>
+      <p className={`description`}>{Task.description}</p>
+
+      <div className={`schedule-date-time ${theme}`}>
+        {Task.scheduleDateTime && (
+          <span className={`schedule-date`}>
+            <AiOutlineCalendar />
+            {selectedDateString}
+            {time === "11:59 PM" ? "" : ` `}
+            {time === "11:59 PM" ? "" : <span>&nbsp;@</span>}
+            {time === "11:59 PM" ? "" : time}
+          </span>
+        )}
+      </div>
     </div>
   );
 }
